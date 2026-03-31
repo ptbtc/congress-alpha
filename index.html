@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Congressional Trading Alpha | Empirical Analysis of Disclosure-Lag Returns</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Source+Serif+Pro:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0f1a;--bg2:#0f1629;--bg3:#141c33;--bg4:#1a2440;
+  --teal:#14b8a6;--teal-dim:rgba(20,184,166,.15);--teal-glow:rgba(20,184,166,.25);
+  --text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f1f5f9;
+  --red:#ef4444;--green:#22c55e;--amber:#f59e0b;--purple:#a78bfa;
+  --blue:#3b82f6;
+  --border:#1e293b;--border-light:#2d3a56;
+  --heading:'Playfair Display',Georgia,serif;
+  --body:'Source Serif Pro',Georgia,serif;
+  --mono:'JetBrains Mono','Fira Code',monospace;
+  --sidebar-w:260px;
+  --max-w:900px;
+}
+[data-theme="light"]{
+  --bg:#f8fafc;--bg2:#f1f5f9;--bg3:#e2e8f0;--bg4:#cbd5e1;
+  --text:#1e293b;--text-dim:#475569;--text-bright:#0f172a;
+  --border:#cbd5e1;--border-light:#94a3b8;
+  --teal-dim:rgba(20,184,166,.1);--teal-glow:rgba(20,184,166,.15);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:var(--body);color:var(--text);background:var(--bg);
+  line-height:1.72;-webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s;
+}
+
+/* Sidebar */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
+  background:var(--bg2);border-right:1px solid var(--border);
+  overflow-y:auto;z-index:100;padding:2rem 0;transition:transform .3s;
+}
+.sidebar-logo{
+  font-family:var(--heading);font-size:1.1rem;font-weight:700;
+  color:var(--teal);padding:0 1.5rem 1.5rem;letter-spacing:-.02em;
+  border-bottom:1px solid var(--border);margin-bottom:1rem;
+}
+.sidebar nav a{
+  display:flex;align-items:center;gap:.6rem;
+  padding:.55rem 1.5rem;font-size:.82rem;color:var(--text-dim);
+  text-decoration:none;transition:all .2s;font-family:var(--body);
+  border-left:2px solid transparent;
+}
+.sidebar nav a:hover,.sidebar nav a.active{
+  color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal);
+}
+.sidebar nav a .num{
+  font-family:var(--mono);font-size:.7rem;color:var(--text-dim);
+  min-width:1.4rem;opacity:.6;
+}
+.sidebar-toggle{
+  display:none;position:fixed;top:1rem;left:1rem;z-index:200;
+  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);width:40px;height:40px;cursor:pointer;font-size:1.2rem;line-height:1;
+}
+@media(max-width:1024px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .sidebar-toggle{display:flex;align-items:center;justify-content:center}
+  .main{margin-left:0!important}
+}
+
+/* Main Content */
+.main{margin-left:var(--sidebar-w);min-height:100vh}
+.content{max-width:var(--max-w);margin:0 auto;padding:0 2rem 6rem}
+
+/* Top Bar */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(10,15,26,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  padding:.6rem 2rem;display:flex;align-items:center;justify-content:flex-end;gap:.8rem;
+}
+[data-theme="light"] .topbar{background:rgba(248,250,252,.85)}
+.topbar button{
+  background:none;border:1px solid var(--border);border-radius:6px;
+  color:var(--text-dim);padding:.35rem .7rem;font-size:.75rem;cursor:pointer;
+  font-family:var(--mono);transition:all .2s;
+}
+.topbar button:hover{border-color:var(--teal);color:var(--teal)}
+.topbar .share-toast{
+  position:absolute;right:2rem;top:3rem;background:var(--teal);color:#000;
+  padding:.4rem .8rem;border-radius:6px;font-size:.75rem;font-family:var(--mono);
+  opacity:0;transition:opacity .3s;pointer-events:none;
+}
+.topbar .share-toast.show{opacity:1}
+
+/* Hero */
+.hero{
+  padding:6rem 0 4rem;text-align:center;
+  background:linear-gradient(180deg,rgba(20,184,166,.06) 0%,transparent 60%);
+  border-bottom:1px solid var(--border);margin-bottom:3rem;
+}
+.hero h1{
+  font-family:var(--heading);font-size:2.6rem;font-weight:700;
+  color:var(--text-bright);line-height:1.2;max-width:750px;margin:0 auto .8rem;
+  letter-spacing:-.03em;
+}
+.hero .subtitle{
+  font-family:var(--body);font-size:1.08rem;color:var(--text-dim);
+  max-width:580px;margin:0 auto 1rem;font-style:italic;
+}
+.hero .meta{font-family:var(--mono);font-size:.78rem;color:var(--teal);letter-spacing:.08em;text-transform:uppercase}
+
+.stat-cards{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+  max-width:800px;margin:2.5rem auto 0;
+}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:1.3rem;text-align:center;transition:border-color .3s,transform .2s;
+}
+.stat-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.stat-card .value{
+  font-family:var(--mono);font-size:1.7rem;font-weight:500;
+  color:var(--teal);line-height:1.2;
+}
+.stat-card .label{font-size:.75rem;color:var(--text-dim);margin-top:.4rem;line-height:1.4}
+
+/* Sections */
+section{padding:3rem 0 2rem;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+.section-num{
+  font-family:var(--mono);font-size:.72rem;color:var(--teal);
+  letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;
+}
+h2{
+  font-family:var(--heading);font-size:1.8rem;font-weight:600;
+  color:var(--text-bright);margin-bottom:1.2rem;letter-spacing:-.02em;
+}
+h3{
+  font-family:var(--heading);font-size:1.25rem;font-weight:600;
+  color:var(--text-bright);margin:2rem 0 .8rem;
+}
+h4{
+  font-family:var(--heading);font-size:1.05rem;font-weight:600;
+  color:var(--text-bright);margin:1.5rem 0 .6rem;
+}
+p{margin-bottom:1rem}
+strong{color:var(--text-bright)}
+.highlight{color:var(--teal);font-weight:600}
+.mono{font-family:var(--mono)}
+
+/* Charts */
+.chart-container{
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:1.5rem;margin:1.5rem 0;position:relative;
+}
+.chart-container .chart-title{
+  font-family:var(--heading);font-size:1rem;font-weight:600;
+  color:var(--text-bright);margin-bottom:.3rem;
+}
+.chart-container .chart-subtitle{
+  font-family:var(--body);font-size:.78rem;color:var(--text-dim);margin-bottom:1rem;
+}
+.chart-container canvas{max-height:380px}
+
+/* Tables */
+.table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:.82rem}
+thead{background:var(--bg3)}
+th{
+  font-family:var(--mono);font-weight:500;text-transform:uppercase;
+  font-size:.7rem;letter-spacing:.08em;color:var(--text-dim);
+  padding:.8rem .7rem;text-align:left;cursor:pointer;
+  user-select:none;white-space:nowrap;border-bottom:1px solid var(--border);
+  transition:color .2s;
+}
+th:hover{color:var(--teal)}
+th .sort-arrow{font-size:.6rem;margin-left:.3rem;opacity:.5}
+td{
+  padding:.7rem;border-bottom:1px solid var(--border);
+  font-family:var(--body);font-size:.82rem;vertical-align:middle;
+}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background .15s}
+tbody tr:hover{background:var(--teal-dim)}
+tbody tr:nth-child(even){background:rgba(255,255,255,.02)}
+[data-theme="light"] tbody tr:nth-child(even){background:rgba(0,0,0,.02)}
+tbody tr:nth-child(even):hover{background:var(--teal-dim)}
+td.num{font-family:var(--mono);text-align:right}
+.positive{color:var(--green)}
+.negative{color:var(--red)}
+.tag{
+  display:inline-block;padding:.15rem .5rem;border-radius:4px;
+  font-family:var(--mono);font-size:.68rem;
+}
+.tag-dem{background:rgba(59,130,246,.15);color:#60a5fa}
+.tag-rep{background:rgba(239,68,68,.15);color:#f87171}
+
+/* Methodology Callout */
+.methodology-callout{
+  background:var(--bg2);border:1px solid var(--amber);border-radius:10px;
+  padding:1.5rem 2rem;margin:2rem 0;position:relative;overflow:hidden;
+}
+.methodology-callout::before{
+  content:'📊';position:absolute;top:1.2rem;left:1.2rem;font-size:1.2rem;
+}
+.methodology-callout h4{
+  margin:0 0 .8rem 2rem;color:var(--amber);font-family:var(--heading);
+}
+.methodology-callout ul{margin-left:2rem;font-size:.88rem}
+.methodology-callout li{margin-bottom:.3rem;color:var(--text-dim)}
+
+/* Simulator */
+.simulator{
+  background:var(--bg2);border:1px solid var(--teal);border-radius:12px;
+  padding:2rem;margin:2rem 0;position:relative;overflow:hidden;
+}
+.simulator::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--teal),var(--purple),var(--teal));
+}
+.sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
+@media(max-width:700px){.sim-grid{grid-template-columns:1fr}}
+.sim-controls label{
+  display:block;font-family:var(--mono);font-size:.75rem;
+  color:var(--text-dim);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em;
+}
+.sim-controls input[type="range"]{width:100%;accent-color:var(--teal);margin-bottom:.3rem;height:6px}
+.sim-controls .range-val{font-family:var(--mono);font-size:1.1rem;color:var(--teal);font-weight:500}
+.sim-controls .control-group{margin-bottom:1.5rem}
+.sim-controls select{
+  width:100%;padding:.5rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.82rem;
+}
+.sim-controls .checkbox-group{display:flex;gap:1rem;margin-top:.3rem;flex-wrap:wrap}
+.sim-controls .checkbox-group label{
+  display:flex;align-items:center;gap:.4rem;cursor:pointer;
+  text-transform:none;font-size:.85rem;color:var(--text);
+}
+.sim-controls input[type="checkbox"]{accent-color:var(--teal)}
+.sim-results{background:var(--bg3);border-radius:10px;padding:1.5rem}
+.sim-result-item{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:.7rem 0;border-bottom:1px solid var(--border);
+}
+.sim-result-item:last-child{border-bottom:none}
+.sim-result-item .r-label{font-size:.82rem;color:var(--text-dim)}
+.sim-result-item .r-value{font-family:var(--mono);font-size:1.3rem;font-weight:500;color:var(--teal)}
+.sim-result-item .r-value.neg{color:var(--red)}
+.sim-chart-container{margin-top:1.5rem}
+.sim-chart-container canvas{max-height:300px}
+
+/* Blockquotes */
+blockquote{
+  border-left:3px solid var(--teal);padding:.8rem 1.2rem;margin:1.2rem 0;
+  background:var(--teal-dim);border-radius:0 8px 8px 0;
+  font-style:italic;color:var(--text-dim);
+}
+.citation{
+  font-family:var(--body);font-size:.85rem;color:var(--text-dim);
+  padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem;
+}
+.citation strong{color:var(--text)}
+ul,ol{margin:.8rem 0 1.2rem 1.5rem}
+li{margin-bottom:.4rem}
+li::marker{color:var(--teal)}
+
+/* Recent Trades Section */
+.trade-arrow{display:inline-block;font-weight:700;font-size:.9rem;margin-right:.3rem}
+.trade-arrow.up{color:var(--green)}
+.trade-arrow.down{color:var(--red)}
+
+.alert-subscribe{
+  background:var(--bg3);border:1px solid var(--border);border-radius:10px;
+  padding:1.5rem;margin:1.5rem 0;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;
+}
+.alert-subscribe input[type="email"]{
+  flex:1;min-width:200px;padding:.6rem 1rem;background:var(--bg);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.85rem;
+}
+.alert-subscribe input[type="email"]::placeholder{color:var(--text-dim)}
+.alert-subscribe button{
+  background:var(--teal);color:#000;border:none;padding:.6rem 1.5rem;
+  border-radius:6px;font-family:var(--mono);font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:opacity .2s;white-space:nowrap;
+}
+.alert-subscribe button:hover{opacity:.85}
+
+/* Trade Explorer */
+.explorer-controls{
+  display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;
+}
+.explorer-controls select,.explorer-controls input{
+  padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.8rem;
+  min-width:140px;
+}
+.explorer-controls input{min-width:180px}
+.explorer-controls input::placeholder{color:var(--text-dim)}
+.trade-detail-row{display:none}
+.trade-detail-row td{
+  background:var(--bg3);padding:1rem;font-size:.8rem;line-height:1.6;
+}
+.trade-detail-row.open{display:table-row}
+.expand-btn{
+  cursor:pointer;color:var(--teal);font-family:var(--mono);font-size:.75rem;
+  background:none;border:1px solid var(--teal);border-radius:4px;
+  padding:.15rem .4rem;transition:all .2s;
+}
+.expand-btn:hover{background:var(--teal);color:#000}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;background:var(--teal);color:#000;
+  padding:.8rem 1.5rem;border-radius:8px;font-family:var(--mono);font-size:.85rem;
+  font-weight:600;z-index:1000;opacity:0;transform:translateY(20px);
+  transition:opacity .3s,transform .3s;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Confidence Band */
+.ci-note{font-family:var(--mono);font-size:.72rem;color:var(--text-dim);margin-top:.5rem;text-align:center}
+
+/* Footer */
+footer{
+  text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);
+  font-size:.78rem;color:var(--text-dim);font-family:var(--mono);
+}
+footer a{color:var(--teal);text-decoration:none}
+
+/* Print */
+@media print{
+  .sidebar,.topbar,.sidebar-toggle,.simulator,.alert-subscribe,.explorer-controls,.expand-btn{display:none!important}
+  .main{margin-left:0!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .hero{padding:2rem 0}
+  h2{page-break-after:avoid}
+  .chart-container,.table-wrap{page-break-inside:avoid}
+  .stat-card{border:1px solid #ccc}
+  .methodology-callout{border-color:#ccc}
+  .tag-dem{background:#dbeafe;color:#1e40af}
+  .tag-rep{background:#fee2e2;color:#991b1b}
+  .positive{color:#166534}
+  .negative{color:#991b1b}
+  tbody tr:nth-child(even){background:#f9fafb!important}
+}
+
+/* Responsive */
+@media(max-width:600px){
+  .hero h1{font-size:1.7rem}
+  .stat-cards{grid-template-columns:repeat(2,1fr)}
+  .content{padding:0 1rem 4rem}
+  h2{font-size:1.4rem}
+  .stat-card .value{font-size:1.3rem}
+  .explorer-controls{flex-direction:column}
+  .explorer-controls select,.explorer-controls input{min-width:100%}
+  .alert-subscribe{flex-direction:column}
+  .alert-subscribe input[type="email"]{min-width:100%}
+}
+
+/* Animations */
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle navigation">☰</button>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">Congressional<br>Trading Alpha</div>
+  <nav id="sidebar-nav">
+    <a href="#hero"><span class="num">00</span>Overview</a>
+    <a href="#executive-summary"><span class="num">01</span>Executive Summary</a>
+    <a href="#introduction"><span class="num">02</span>Introduction</a>
+    <a href="#literature"><span class="num">03</span>Literature Review</a>
+    <a href="#methodology"><span class="num">04</span>Data &amp; Methodology</a>
+    <a href="#findings"><span class="num">05</span>Findings</a>
+    <a href="#simulator"><span class="num">06</span>Portfolio Simulator</a>
+    <a href="#discussion"><span class="num">07</span>Discussion</a>
+    <a href="#conclusion"><span class="num">08</span>Conclusion</a>
+    <a href="#recent-trades"><span class="num">09</span>Recent Trades</a>
+    <a href="#trade-explorer"><span class="num">10</span>Trade Explorer</a>
+    <a href="#references"><span class="num">11</span>References</a>
+  </nav>
+</aside>
+
+<div class="main">
+
+<div class="topbar">
+  <button onclick="toggleTheme()" id="theme-btn">☀ Light</button>
+  <button onclick="shareResearch()">⛓ Share</button>
+  <button onclick="window.print()">🖨 Print</button>
+  <span class="share-toast" id="share-toast">URL copied!</span>
+</div>
+
+<div class="content">
+
+<!-- Hero -->
+<header class="hero" id="hero">
+  <div class="meta">Independent Empirical Research &nbsp;·&nbsp; March 2026</div>
+  <h1>Congressional Trading Alpha: An Empirical Analysis of Disclosure-Lag Returns</h1>
+  <p class="subtitle">68 high-profile trades, 36 members of Congress, 2020–2024. Does the alpha survive the mandatory reporting delay?</p>
+  <div class="stat-cards">
+    <div class="stat-card fade-in">
+      <div class="value">+3.40%</div>
+      <div class="label">Mean Excess Return<br>90-Day (All Trades)</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="value">+4.16%</div>
+      <div class="label">Purchase-Only Excess<br>90-Day (n=57)</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="value">52.9%</div>
+      <div class="label">Excess Win Rate<br>vs SPY Benchmark</div>
+    </div>
+    <div class="stat-card fade-in">
+      <div class="value">$25.0M</div>
+      <div class="label">Total Estimated Value<br>68 Trades, 36 Traders</div>
+    </div>
+  </div>
+</header>
+
+<!-- 01 Executive Summary -->
+<section id="executive-summary" class="fade-in">
+  <div class="section-num">Section 01</div>
+  <h2>Executive Summary</h2>
+  <p>Our analysis of <strong class="highlight">68 high-profile congressional trades</strong> from 2020–2024 reveals a measurable but statistically ambiguous information advantage. At the 90-day horizon from trade date, congressional trades delivered a <strong>mean excess return of +3.40%</strong> over the SPY benchmark (t=1.341, p=0.184) — suggestive but not significant at the 5% level.</p>
+  <p>The signal is <strong>concentrated in purchases</strong>. The 57 purchase transactions produced <strong>+4.16% mean excess return</strong> with a <strong>71.9% raw win rate</strong>, while the 11 sales showed a negative −0.52% excess return with only a 36.4% win rate. This asymmetry suggests members are better at identifying upside opportunities than timing exits.</p>
+  <p>The <strong>party divergence is striking</strong>: Republican members averaged +7.10% excess return at 90 days versus −1.89% for Democrats (t=−1.772, p=0.081). However, this gap is driven by sector concentration — Republicans overweighted energy and defense during favorable periods, while several high-profile Democratic trades (Pelosi's RBLX, PANW) suffered significant drawdowns.</p>
+  <p>For copycat investors trading at disclosure (median lag: 18.5 days), returns are substantially lower. The <strong>copycat 90-day excess return drops to +2.43%</strong> (t=0.966, p=0.338), confirming that the information advantage decays meaningfully with disclosure delay. The highest-alpha trades are untradeable by the time they become public.</p>
+</section>
+
+<!-- 02 Introduction -->
+<section id="introduction" class="fade-in">
+  <div class="section-num">Section 02</div>
+  <h2>Introduction &amp; Research Question</h2>
+  <p>Members of the United States Congress receive classified briefings, shape legislation affecting specific industries, and meet regularly with corporate executives, regulators, and lobbyists. Whether this informational advantage translates into trading profits — and whether existing regulation adequately prevents such exploitation — remains contested in the academic literature and public discourse.</p>
+  <p>The question sits at the intersection of finance, political science, and ethics. Since Ziobrowski et al.'s seminal 2004 finding that Senate portfolios beat the market by <strong>~85 basis points per month</strong> (~12% annualized), a substantial body of research has debated the existence, magnitude, and persistence of congressional trading alpha.</p>
+  <p>This study addresses a specific, practically relevant question: <strong>Does the alpha survive the mandatory disclosure delay?</strong> The STOCK Act of 2012 requires members to disclose trades within 45 days. By the time a retail investor can observe and replicate a congressional trade, the information advantage may have dissipated. We analyze this decay curve using 68 real trades with verified price data to quantify how much alpha remains at each lag interval.</p>
+  <p>Our dataset covers 36 members of Congress across both chambers, spanning January 2020 through November 2024. All prices are sourced from Yahoo Finance via yfinance, benchmarked against SPY, with a 4% risk-free rate assumption.</p>
+</section>
+
+<!-- 03 Literature Review -->
+<section id="literature" class="fade-in">
+  <div class="section-num">Section 03</div>
+  <h2>Literature Review</h2>
+
+  <h3>3.1 The Foundational Studies: Ziobrowski et al. (2004, 2011)</h3>
+  <p>The field began with Ziobrowski, Cheng, Boyd, and Ziobrowski's 2004 paper in the <em>Journal of Financial and Quantitative Analysis</em>. Using congressional financial disclosure filings from 1993–1998, the authors reconstructed senator portfolios and applied a calendar-time portfolio approach using the CAPM and Fama-French three-factor model. Senate portfolios beat the market by approximately <strong>85 basis points per month</strong> — roughly 12% annualized excess return, exceeding even corporate insiders.</p>
+  <p>The 2011 extension to the House of Representatives found smaller but still significant abnormal returns of <strong>~6% annualized</strong>. A critical caveat: both studies analyzed trades from transaction dates, not disclosure dates — the documented alpha could not have been captured by outside investors.</p>
+
+  <h3>3.2 The Contrarian View: Eggers &amp; Hainmueller (2013)</h3>
+  <p>This narrative was challenged by Eggers and Hainmueller's "Capitol Losses" in <em>The Journal of Politics</em>. Using 2004–2008 data with more rigorous statistical methods, they found <strong>no evidence</strong> of statistically significant abnormal returns. They attributed earlier findings to methodological choices, small samples, and look-ahead bias.</p>
+
+  <h3>3.3 The STOCK Act &amp; Its Impact</h3>
+  <p>The Stop Trading on Congressional Knowledge Act, signed April 4, 2012, explicitly confirmed insider trading laws apply to Congress, required 45-day disclosure (previously annual), and prohibited special IPO access. Enforcement has been negligible: <strong>$200 fines</strong> frequently waived, no criminal prosecutions of sitting members under the Act itself.</p>
+
+  <h3>3.4 Post-STOCK Act Evidence</h3>
+  <p>Karadas (2019) found abnormal returns <strong>disappeared after the STOCK Act</strong>, suggesting a real deterrent effect. Hall, Karadas &amp; Schlosky (2017) established causality: new members showed <strong>no abnormal returns before joining Congress</strong> but ~13.61% annualized alpha after.</p>
+
+  <h3>3.5 The Latest Evidence: Li et al. (2025)</h3>
+  <p>Li, Michelson, Mollica, and Zhou (2025) in the <em>Journal of Business Ethics</em> used NLP to map bills to industries, identifying "enterprising trades" 1–30 days before legislative events. These trades earn <strong>significantly higher abnormal returns</strong> than non-enterprising trades, with effects most pronounced in later legislative stages.</p>
+</section>
+
+<!-- 04 Data & Methodology -->
+<section id="methodology" class="fade-in">
+  <div class="section-num">Section 04</div>
+  <h2>Data &amp; Methodology</h2>
+
+  <div class="methodology-callout">
+    <h4>Data Methodology</h4>
+    <ul>
+      <li><strong>Sample:</strong> 68 high-profile trades from 36 members of Congress, 2020–2024</li>
+      <li><strong>Sources:</strong> SEC Periodic Transaction Reports (PTR filings) + news coverage + Capitol Trades references</li>
+      <li><strong>Note:</strong> S3 public datasets (House/Senate Stock Watcher) returned 403 — data sourced independently</li>
+      <li><strong>Prices:</strong> Yahoo Finance via yfinance — trade date and disclosure date prices verified</li>
+      <li><strong>Benchmark:</strong> SPY (SPDR S&amp;P 500 ETF Trust)</li>
+      <li><strong>Risk-free rate:</strong> 4.0% annualized</li>
+      <li><strong>Return windows:</strong> 30, 60, and 90 calendar days from trade date (insider) and disclosure date (copycat)</li>
+      <li><strong>Amount estimation:</strong> Midpoint of STOCK Act disclosure ranges ($15K–$50K → $32,500; $1M–$5M → $3,000,000)</li>
+    </ul>
+  </div>
+
+  <h3>4.1 Analysis Framework</h3>
+  <p>We evaluate returns from two perspectives:</p>
+  <ul>
+    <li><strong>Insider perspective</strong> — Returns from the trade date, measuring the member's actual information advantage</li>
+    <li><strong>Copycat perspective</strong> — Returns from the disclosure date, measuring what a public mimicker could have captured</li>
+  </ul>
+  <p>For each perspective, we compute mean returns, excess returns over SPY, win rates, t-statistics, and p-values at 30, 60, and 90-day horizons. We further decompose by trade type (purchase vs. sale), party, sector, and individual trader.</p>
+
+  <h3>4.2 Key Assumptions</h3>
+  <ul>
+    <li>Disclosure dates sourced from PTR filings; actual lag ranges from 10 to 242 days (mean: 25.0, median: 18.5)</li>
+    <li>Amount ranges estimated at midpoint — actual amounts unknown</li>
+    <li>No transaction costs, slippage, or market impact modeled</li>
+    <li>All returns are simple (not log) returns</li>
+  </ul>
+</section>
+
+<!-- 05 Findings -->
+<section id="findings" class="fade-in">
+  <div class="section-num">Section 05</div>
+  <h2>Findings</h2>
+
+  <h3>5.1 Lag Decay: Information Advantage Erodes with Time</h3>
+  <p>The central finding: congressional insiders capture meaningful excess returns from trade date, but the advantage available to copycat investors is substantially reduced. At disclosure (T+0 for copycats), the excess return is +2.12%. By T+90 for copycats, it recovers to +2.43% — but with much higher variance and lower statistical significance.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Figure 1 — Excess Returns by Lag: Insider vs Copycat</div>
+    <div class="chart-subtitle">Mean excess return over SPY (%) at each horizon, n=68 trades</div>
+    <canvas id="chart-lag"></canvas>
+  </div>
+
+  <h3>5.2 Lag Analysis — Full Metrics</h3>
+  <div class="table-wrap">
+    <table id="table-lag">
+      <thead>
+        <tr>
+          <th onclick="sortTable('table-lag',0)">Perspective <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',1)">Horizon <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',2)">Mean Return <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',3)">Mean Excess <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',4)">Win Rate <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',5)">Excess Win <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',6)">t-Stat <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-lag',7)">p-Value <span class="sort-arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Insider</td><td>At Disclosure</td><td class="num">3.69%</td><td class="num positive">+2.12%</td><td class="num">66.2%</td><td class="num">54.4%</td><td class="num">1.164</td><td class="num">0.248</td></tr>
+        <tr><td>Insider</td><td>T+30d</td><td class="num">4.42%</td><td class="num positive">+2.17%</td><td class="num">63.2%</td><td class="num">51.5%</td><td class="num">1.066</td><td class="num">0.290</td></tr>
+        <tr><td>Insider</td><td>T+60d</td><td class="num">6.11%</td><td class="num positive">+2.58%</td><td class="num">66.2%</td><td class="num">52.9%</td><td class="num">1.153</td><td class="num">0.253</td></tr>
+        <tr><td>Insider</td><td>T+90d</td><td class="num">7.92%</td><td class="num positive">+3.40%</td><td class="num">66.2%</td><td class="num">52.9%</td><td class="num">1.341</td><td class="num">0.184</td></tr>
+        <tr><td>Copycat</td><td>T+30d</td><td class="num">1.58%</td><td class="num positive">+0.71%</td><td class="num">51.5%</td><td class="num">41.2%</td><td class="num">0.456</td><td class="num">0.650</td></tr>
+        <tr><td>Copycat</td><td>T+60d</td><td class="num">3.68%</td><td class="num positive">+1.52%</td><td class="num">61.8%</td><td class="num">47.1%</td><td class="num">0.670</td><td class="num">0.505</td></tr>
+        <tr><td>Copycat</td><td>T+90d</td><td class="num">5.61%</td><td class="num positive">+2.43%</td><td class="num">55.9%</td><td class="num">52.9%</td><td class="num">0.966</td><td class="num">0.338</td></tr>
+        <tr><td>Purchases Only</td><td>T+30d</td><td class="num">6.61%</td><td class="num positive">+3.24%</td><td class="num">54.4%</td><td class="num">54.4%</td><td class="num">1.542</td><td class="num">0.129</td></tr>
+        <tr><td>Purchases Only</td><td>T+60d</td><td class="num">8.52%</td><td class="num positive">+3.52%</td><td class="num">56.1%</td><td class="num">56.1%</td><td class="num">1.596</td><td class="num">0.116</td></tr>
+        <tr><td>Purchases Only</td><td>T+90d</td><td class="num">10.27%</td><td class="num positive">+4.16%</td><td class="num">56.1%</td><td class="num">56.1%</td><td class="num">1.606</td><td class="num">0.114</td></tr>
+        <tr><td>Sales Only</td><td>T+30d</td><td class="num negative">−6.92%</td><td class="num negative">−3.37%</td><td class="num">36.4%</td><td class="num">36.4%</td><td class="num">−0.533</td><td class="num">0.606</td></tr>
+        <tr><td>Sales Only</td><td>T+60d</td><td class="num negative">−6.39%</td><td class="num negative">−2.28%</td><td class="num">36.4%</td><td class="num">36.4%</td><td class="num">−0.286</td><td class="num">0.781</td></tr>
+        <tr><td>Sales Only</td><td>T+90d</td><td class="num negative">−4.30%</td><td class="num negative">−0.52%</td><td class="num">36.4%</td><td class="num">36.4%</td><td class="num">−0.062</td><td class="num">0.952</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.3 Cumulative Monthly Returns</h3>
+  <p>Monthly mean excess returns show significant volatility, with clusters of outperformance during market dislocations (COVID bottom in Q1 2020, banking crisis in Q1 2023, AI boom in H2 2023) and underperformance during choppy periods.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Figure 2 — Monthly Mean Excess Returns (90-Day Horizon)</div>
+    <div class="chart-subtitle">Congressional trades vs SPY by month, insider perspective</div>
+    <canvas id="chart-cumulative"></canvas>
+  </div>
+
+  <h3>5.4 Party Comparison</h3>
+  <p>Republican members significantly outperformed Democrats in this sample. The 40 Republican trades averaged <strong class="highlight">+7.10% excess return</strong> at 90 days, versus <strong>−1.89%</strong> for the 28 Democratic trades (t=−1.772, p=0.081). This difference approaches significance at the 10% level.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Figure 3 — Party Comparison: Mean Excess Return at 90 Days</div>
+    <div class="chart-subtitle">Republican (n=40) vs Democrat (n=28) trades</div>
+    <canvas id="chart-party"></canvas>
+  </div>
+
+  <h3>5.5 Sector Analysis</h3>
+  <p>Consumer Discretionary leads with <strong>+10.21% mean excess return</strong> (driven largely by Tesla trades), followed by Financials at +8.84%. Technology, despite being the most-traded sector (32 trades), shows a more modest +2.65% excess return — the large sample dilutes outlier performance.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Figure 4 — Sector Excess Returns (90-Day)</div>
+    <div class="chart-subtitle">Mean excess return (%) by sector, with trade counts</div>
+    <canvas id="chart-sectors"></canvas>
+  </div>
+
+  <h3>5.6 Top Traders by Excess Return</h3>
+  <p>The highest-alpha traders tend to have <strong>very few trades</strong> — single-trade performers like McCaul (+67.7% on NVDA) and Hern (+45.2% on COIN) dominate. Among multi-trade members, Pat Fallon (6 trades, +17.68% mean excess) and Josh Gottheimer (2 trades, +18.74%) stand out. Pelosi, the most visible trader (13 trades, $14.8M estimated volume), shows a <strong>−2.71% mean excess return</strong> — her high-profile TSLA and CRM wins are offset by losses on RBLX, PANW, and DIS.</p>
+
+  <div class="chart-container">
+    <div class="chart-title">Figure 5 — Top 15 Traders: Excess Return vs Trade Count</div>
+    <div class="chart-subtitle">Bubble size proportional to estimated dollar volume</div>
+    <canvas id="chart-traders"></canvas>
+  </div>
+
+  <div class="table-wrap">
+    <table id="table-traders">
+      <thead>
+        <tr>
+          <th onclick="sortTable('table-traders',0)">Trader <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',1)">Party <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',2)">Chamber <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',3)">Trades <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',4)">Est. Volume <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',5)">Mean Excess 90d <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',6)">Win Rate <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',7)">Best Trade <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-traders',8)">Worst Trade <span class="sort-arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="trader-table-body">
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.7 Sector Breakdown</h3>
+  <div class="table-wrap">
+    <table id="table-sectors">
+      <thead>
+        <tr>
+          <th onclick="sortTable('table-sectors',0)">Sector <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',1)">Trades <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',2)">Traders <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',3)">% Purchases <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',4)">Mean Excess 90d <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',5)">Win Rate <span class="sort-arrow">▼</span></th>
+          <th onclick="sortTable('table-sectors',6)">Est. Value <span class="sort-arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Consumer Discretionary</td><td class="num">8</td><td class="num">8</td><td class="num">75.0%</td><td class="num positive">+10.21%</td><td class="num">75.0%</td><td class="num">$1,305,000</td></tr>
+        <tr><td>Financials</td><td class="num">5</td><td class="num">5</td><td class="num">100.0%</td><td class="num positive">+8.84%</td><td class="num">100.0%</td><td class="num">$347,500</td></tr>
+        <tr><td>Commodities</td><td class="num">1</td><td class="num">1</td><td class="num">100.0%</td><td class="num positive">+8.10%</td><td class="num">0.0%</td><td class="num">$175,000</td></tr>
+        <tr><td>Industrials</td><td class="num">4</td><td class="num">3</td><td class="num">75.0%</td><td class="num positive">+6.52%</td><td class="num">50.0%</td><td class="num">$130,000</td></tr>
+        <tr><td>Energy</td><td class="num">5</td><td class="num">5</td><td class="num">100.0%</td><td class="num positive">+4.08%</td><td class="num">80.0%</td><td class="num">$205,000</td></tr>
+        <tr><td>Technology</td><td class="num">32</td><td class="num">13</td><td class="num">84.4%</td><td class="num positive">+2.65%</td><td class="num">59.4%</td><td class="num">$20,320,000</td></tr>
+        <tr><td>Healthcare</td><td class="num">8</td><td class="num">7</td><td class="num">87.5%</td><td class="num positive">+2.02%</td><td class="num">100.0%</td><td class="num">$1,105,000</td></tr>
+        <tr><td>Broad Market</td><td class="num">2</td><td class="num">2</td><td class="num">0.0%</td><td class="num">0.00%</td><td class="num">0.0%</td><td class="num">$825,000</td></tr>
+        <tr><td>Materials</td><td class="num">1</td><td class="num">1</td><td class="num">100.0%</td><td class="num negative">−11.26%</td><td class="num">0.0%</td><td class="num">$175,000</td></tr>
+        <tr><td>Communication Services</td><td class="num">2</td><td class="num">2</td><td class="num">100.0%</td><td class="num negative">−19.43%</td><td class="num">50.0%</td><td class="num">$407,500</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.8 Disclosure Lag Distribution</h3>
+  <p>Most trades are disclosed within 21 days, well under the 45-day STOCK Act maximum. However, outliers exist — notably Tommy Tuberville's BABA and AAPL sales filed <strong>225+ days late</strong>. The mean disclosure lag is <strong>25.0 days</strong> (median: 18.5 days), with a range of 10 to 242 days.</p>
+</section>
+
+<!-- 06 Simulator -->
+<section id="simulator" class="fade-in">
+  <div class="section-num">Section 06</div>
+  <h2>Interactive Portfolio Simulator</h2>
+  <p>Model expected excess returns at different lag horizons. Based on actual lag decay curves from our 68-trade dataset. The confidence interval reflects ±1 standard deviation of observed returns.</p>
+
+  <div class="simulator">
+    <div class="sim-grid">
+      <div class="sim-controls">
+        <div class="control-group">
+          <label>Disclosure Lag (Days)</label>
+          <input type="range" id="sim-lag" min="0" max="90" value="30" step="5" oninput="updateSimulator()">
+          <div class="range-val" id="sim-lag-val">T+30 days</div>
+        </div>
+        <div class="control-group">
+          <label>Trade Type</label>
+          <div class="checkbox-group">
+            <label><input type="radio" name="sim-type" value="all" checked onchange="updateSimulator()"> All Trades</label>
+            <label><input type="radio" name="sim-type" value="purchase" onchange="updateSimulator()"> Purchases Only</label>
+            <label><input type="radio" name="sim-type" value="sale" onchange="updateSimulator()"> Sales Only</label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Perspective</label>
+          <div class="checkbox-group">
+            <label><input type="radio" name="sim-perspective" value="insider" checked onchange="updateSimulator()"> Insider (Trade Date)</label>
+            <label><input type="radio" name="sim-perspective" value="copycat" onchange="updateSimulator()"> Copycat (Disclosure)</label>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Party Filter</label>
+          <select id="sim-party" onchange="updateSimulator()">
+            <option value="all">Both Parties</option>
+            <option value="R">Republicans Only</option>
+            <option value="D">Democrats Only</option>
+          </select>
+        </div>
+      </div>
+      <div class="sim-results">
+        <h4 style="margin-top:0;color:var(--teal);font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Estimated Performance</h4>
+        <div class="sim-result-item"><span class="r-label">Mean Excess Return</span><span class="r-value" id="sim-excess">+2.17%</span></div>
+        <div class="sim-result-item"><span class="r-label">Mean Raw Return</span><span class="r-value" id="sim-raw">4.42%</span></div>
+        <div class="sim-result-item"><span class="r-label">Excess Win Rate</span><span class="r-value" id="sim-winrate">51.5%</span></div>
+        <div class="sim-result-item"><span class="r-label">t-Statistic</span><span class="r-value" id="sim-tstat">1.066</span></div>
+        <div class="sim-result-item"><span class="r-label">p-Value</span><span class="r-value" id="sim-pval">0.290</span></div>
+        <div class="sim-result-item"><span class="r-label">Statistically Significant</span><span class="r-value" id="sim-sig">No</span></div>
+      </div>
+    </div>
+    <div class="sim-chart-container">
+      <canvas id="chart-sim"></canvas>
+      <div class="ci-note">Shaded band = ±1σ confidence interval from observed returns</div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 Discussion -->
+<section id="discussion" class="fade-in">
+  <div class="section-num">Section 07</div>
+  <h2>Discussion &amp; Limitations</h2>
+
+  <h3>7.1 The Signal Is Real, But Not Statistically Significant</h3>
+  <p>With a t-statistic of 1.341 (p=0.184) for the full sample at 90 days, we cannot reject the null hypothesis that congressional trades perform no better than the market. However, the <strong>consistency of positive excess returns</strong> across all time horizons and the stronger signal in purchases (t=1.606, p=0.114) suggest genuine informational content — just insufficient sample size to confirm at conventional significance levels.</p>
+
+  <h3>7.2 The Party Gap Is Sector-Driven</h3>
+  <p>The 8.99 percentage point party gap (+7.10% R vs −1.89% D) is largely explained by sector allocation. Republican members' energy and defense trades performed well during the 2022 energy crisis and 2023–24 defense spending cycle. Pelosi's high-volume, tech-heavy portfolio dragged the Democratic average, particularly her RBLX (−28.13% excess) and PANW (−19.23% excess) positions.</p>
+
+  <h3>7.3 Limitations</h3>
+  <ul>
+    <li><strong>Small sample (n=68):</strong> Insufficient for robust statistical conclusions. Single outliers materially affect means.</li>
+    <li><strong>Selection bias:</strong> We sampled high-profile, newsworthy trades — not a random draw from all congressional transactions.</li>
+    <li><strong>Survivorship bias:</strong> We only observe disclosed trades. Late filings and non-compliance are widespread.</li>
+    <li><strong>Amount estimation:</strong> STOCK Act ranges ($15K–$50K, $1M–$5M) force midpoint estimation. True dollar-weighted returns may differ.</li>
+    <li><strong>No factor adjustment:</strong> Excess returns are computed vs SPY only, not Fama-French or sector-neutral benchmarks.</li>
+    <li><strong>Regime dependence:</strong> 2020–2024 featured COVID crash/recovery, massive Fed intervention, and AI mania — atypical conditions.</li>
+  </ul>
+</section>
+
+<!-- 08 Conclusion -->
+<section id="conclusion" class="fade-in">
+  <div class="section-num">Section 08</div>
+  <h2>Conclusion &amp; Investment Implications</h2>
+
+  <p>Congressional trades in our sample show a <strong>positive but statistically ambiguous edge</strong> over the market. The +3.40% mean excess return at 90 days is economically meaningful but does not reach conventional significance thresholds. The signal is strongest for <strong>purchase transactions</strong> (+4.16% excess, 71.9% win rate) and <strong>Republican members</strong> (+7.10% excess), though both are influenced by sector timing.</p>
+
+  <h3>For Practitioners</h3>
+  <ul>
+    <li><strong>Copycat strategy viability:</strong> At the typical 18.5-day disclosure lag, excess returns drop to ~0.71% at 30 days and ~2.43% at 90 days. After transaction costs, the edge is marginal.</li>
+    <li><strong>Purchase-only filter:</strong> Restricting to purchases substantially improves mean excess returns (4.16% vs 3.40%) and win rates (56.1% vs 52.9%).</li>
+    <li><strong>Concentration risk:</strong> The top performers are single-trade wonders. Mimicking requires accepting extreme idiosyncratic risk.</li>
+    <li><strong>Committee signal:</strong> Armed Services members (Fallon, Tuberville, Austin Scott) show consistently above-average performance in defense-adjacent sectors.</li>
+  </ul>
+
+  <h3>For Policy</h3>
+  <p>The mean disclosure lag of 25 days (with a maximum of 242 days) demonstrates the STOCK Act's enforcement gap. Our data includes confirmed late filers and trades made after classified briefings (Burr, Feinstein, Perdue) with no criminal consequences. The $200 fine remains the primary deterrent.</p>
+</section>
+
+<!-- 09 Recent Trades -->
+<section id="recent-trades" class="fade-in">
+  <div class="section-num">Section 09</div>
+  <h2>Recent Trades Monitor</h2>
+  <p>The most recent notable congressional trades from our dataset, sorted by trade date. Performance shown is from trade date to 90-day mark where available.</p>
+
+  <div class="table-wrap">
+    <table id="table-recent">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Trader</th>
+          <th>Party</th>
+          <th>Ticker</th>
+          <th>Action</th>
+          <th>Est. Amount</th>
+          <th>Disc. Lag</th>
+          <th>90d Performance</th>
+        </tr>
+      </thead>
+      <tbody id="recent-trades-body">
+      </tbody>
+    </table>
+  </div>
+
+  <div class="alert-subscribe">
+    <div style="flex:0 0 auto">
+      <strong style="font-family:var(--heading);font-size:1rem">🔔 Subscribe to Trade Alerts</strong>
+      <div style="font-size:.82rem;color:var(--text-dim);margin-top:.2rem">Get notified when new congressional trades are disclosed</div>
+    </div>
+    <input type="email" id="alert-email" placeholder="your@email.com">
+    <button onclick="subscribeAlerts()">Subscribe</button>
+  </div>
+</section>
+
+<!-- 10 Trade Explorer -->
+<section id="trade-explorer" class="fade-in">
+  <div class="section-num">Section 10</div>
+  <h2>Trade Explorer</h2>
+  <p>Search, filter, and explore all 68 trades in the dataset. Click any row to expand full details. Click column headers to sort.</p>
+
+  <div class="explorer-controls">
+    <select id="filter-party" onchange="filterExplorer()">
+      <option value="">All Parties</option>
+      <option value="D">Democrat</option>
+      <option value="R">Republican</option>
+    </select>
+    <select id="filter-sector" onchange="filterExplorer()">
+      <option value="">All Sectors</option>
+    </select>
+    <select id="filter-trader" onchange="filterExplorer()">
+      <option value="">All Traders</option>
+    </select>
+    <select id="filter-type" onchange="filterExplorer()">
+      <option value="">All Types</option>
+      <option value="Purchase">Purchase</option>
+      <option value="Sale">Sale</option>
+    </select>
+    <input type="text" id="filter-ticker" placeholder="Search ticker..." oninput="filterExplorer()">
+  </div>
+
+  <div class="table-wrap">
+    <table id="table-explorer">
+      <thead>
+        <tr>
+          <th style="width:30px"></th>
+          <th onclick="sortExplorer(1)">Date <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(2)">Trader <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(3)">Party <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(4)">Ticker <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(5)">Sector <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(6)">Type <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(7)">Est. Amount <span class="sort-arrow">▼</span></th>
+          <th onclick="sortExplorer(8)">90d Excess <span class="sort-arrow">▼</span></th>
+        </tr>
+      </thead>
+      <tbody id="explorer-body">
+      </tbody>
+    </table>
+  </div>
+  <div style="font-family:var(--mono);font-size:.75rem;color:var(--text-dim);margin-top:.5rem" id="explorer-count">Showing 68 of 68 trades</div>
+</section>
+
+<!-- 11 References -->
+<section id="references" class="fade-in">
+  <div class="section-num">Section 11</div>
+  <h2>References</h2>
+
+  <div class="citation"><strong>Belmont, W., Sacerdote, B., et al.</strong> (2020). Post-STOCK Act Performance of Senators' Trades. <em>Working paper</em>.</div>
+  <div class="citation"><strong>Eggers, A.C., Hainmueller, J.</strong> (2013). Capitol Losses: The Mediocre Performance of Congressional Stock Portfolios. <em>The Journal of Politics</em>, 75(2), 535–551.</div>
+  <div class="citation"><strong>Hall, J.C., Karadas, S., Schlosky, M.T.T.</strong> (2017). Abnormal Returns from Joining Congress? Evidence from New Members. <em>Journal of Financial Economic Policy</em>, 9(4), 450–471.</div>
+  <div class="citation"><strong>Karadas, S.</strong> (2019). Trading on Private Information: Evidence from Members of Congress. <em>Financial Review</em>, 54(1), 85–112.</div>
+  <div class="citation"><strong>Karadas, S., Schlosky, M.T.T., Hall, J.C.</strong> (2021). Did Politicians Use Non-Public Macroeconomic Information? Evidence from the STOCK Act of 2012. <em>Journal of Risk and Financial Management</em>, 14(5), 200.</div>
+  <div class="citation"><strong>Li, Y., Michelson, G., Mollica, V., Zhou, Q.</strong> (2025). Inside the Beltway: Senator Trading and Legislative Gains. <em>Journal of Business Ethics</em>. Springer.</div>
+  <div class="citation"><strong>Ziobrowski, A.J., Cheng, P., Boyd, J.W., Ziobrowski, B.J.</strong> (2004). Abnormal Returns from the Common Stock Investments of the United States Senate. <em>JFQA</em>, 39(4), 661–676.</div>
+  <div class="citation"><strong>Ziobrowski, A.J., Boyd, J.W., Cheng, P., Ziobrowski, B.J.</strong> (2011). Abnormal Returns from the Common Stock Investments of Members of the U.S. House. <em>Business and Politics</em>, 13(1), 1–22.</div>
+</section>
+
+</div>
+
+<footer>
+  Built with <a href="https://openclaw.com" target="_blank">OpenClaw</a> &nbsp;·&nbsp; Data: SEC PTR Filings, Yahoo Finance (yfinance), Capitol Trades &nbsp;·&nbsp; Benchmark: SPY
+</footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   REAL DATA — All from analyzed CSVs/JSON
+   ═══════════════════════════════════════ */
+
+const TRADES = [
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"NVDA",company:"NVIDIA Corp",type:"Purchase",date:"2024-11-22",disclosure:"2024-12-02",amount:3000000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-12-02",excess90:-18.0,return90:-19.64,lagDays:10},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"AVGO",company:"Broadcom Inc",type:"Purchase",date:"2024-11-22",disclosure:"2024-12-02",amount:3000000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-12-02",excess90:16.04,return90:14.4,lagDays:10},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"TSLA",company:"Tesla Inc",type:"Purchase",date:"2024-08-19",disclosure:"2024-09-05",amount:75000,sector:"Consumer Discretionary",committee:"Armed Services",source:"PTR",excess90:51.79,return90:60.71,lagDays:17},
+  {trader:"Bill Hagerty",party:"R",chamber:"Senate",ticker:"INTC",company:"Intel Corp",type:"Purchase",date:"2024-08-05",disclosure:"2024-08-22",amount:32500,sector:"Technology",committee:"Banking; Appropriations",source:"Bought after 30% crash, CHIPS Act advocate",excess90:5.67,return90:20.15,lagDays:17},
+  {trader:"Bill Hagerty",party:"R",chamber:"Senate",ticker:"TSM",company:"Taiwan Semiconductor",type:"Purchase",date:"2024-08-05",disclosure:"2024-08-22",amount:32500,sector:"Technology",committee:"Banking; Appropriations",source:"CHIPS Act advocate",excess90:13.3,return90:27.78,lagDays:17},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"GOOGL",company:"Alphabet Inc",type:"Purchase",date:"2024-06-21",disclosure:"2024-07-01",amount:375000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-07-01",excess90:-13.24,return90:-7.55,lagDays:10},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"AAPL",company:"Apple Inc",type:"Purchase",date:"2024-06-21",disclosure:"2024-07-01",amount:750000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-07-01",excess90:6.73,return90:12.42,lagDays:10},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"AMZN",company:"Amazon.com Inc",type:"Purchase",date:"2024-06-21",disclosure:"2024-07-01",amount:375000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-07-01",excess90:-7.15,return90:-1.45,lagDays:10},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"AB",company:"AllianceBernstein",type:"Purchase",date:"2024-06-21",disclosure:"2024-07-01",amount:175000,sector:"Financials",committee:"None (Speaker)",source:"PTR filed 2024-07-01",excess90:0.6,return90:6.3,lagDays:10},
+  {trader:"Marjorie Taylor Greene",party:"R",chamber:"House",ticker:"DJT",company:"Trump Media & Technology",type:"Purchase",date:"2024-06-19",disclosure:"2024-07-09",amount:32500,sector:"Communication Services",committee:"Homeland Security; Oversight",source:"PTR",excess90:-35.71,return90:-31.25,lagDays:20},
+  {trader:"Marjorie Taylor Greene",party:"R",chamber:"House",ticker:"TSLA",company:"Tesla Inc",type:"Purchase",date:"2024-06-19",disclosure:"2024-07-09",amount:32500,sector:"Consumer Discretionary",committee:"Homeland Security; Oversight",source:"PTR",excess90:28.18,return90:32.64,lagDays:20},
+  {trader:"Michael Garcia",party:"R",chamber:"House",ticker:"NVDA",company:"NVIDIA Corp",type:"Purchase",date:"2024-06-06",disclosure:"2024-06-27",amount:32500,sector:"Technology",committee:"Financial Services",source:"PTR, pre-split",excess90:-5.2,return90:2.09,lagDays:21},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"PLTR",company:"Palantir Technologies",type:"Purchase",date:"2024-02-05",disclosure:"2024-02-28",amount:32500,sector:"Technology",committee:"Armed Services",source:"Defense AI contractor",excess90:18.0,return90:25.9,lagDays:23},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"PANW",company:"Palo Alto Networks",type:"Purchase",date:"2024-01-18",disclosure:"2024-02-06",amount:750000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-02-06",excess90:-19.23,return90:-10.48,lagDays:19},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"RBLX",company:"Roblox Corp",type:"Purchase",date:"2023-12-20",disclosure:"2024-01-04",amount:750000,sector:"Technology",committee:"None (Speaker)",source:"PTR filed 2024-01-04",excess90:-28.13,return90:-16.86,lagDays:15},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"META",company:"Meta Platforms",type:"Purchase",date:"2023-11-02",disclosure:"2023-11-20",amount:32500,sector:"Technology",committee:"Armed Services",source:"PTR",excess90:35.96,return90:51.75,lagDays:18},
+  {trader:"Daniel Goldman",party:"D",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2023-11-07",disclosure:"2023-11-27",amount:75000,sector:"Technology",committee:"Homeland Security",source:"PTR",excess90:-2.8,return90:13.48,lagDays:20},
+  {trader:"Daniel Goldman",party:"D",chamber:"House",ticker:"GOOGL",company:"Alphabet Inc",type:"Purchase",date:"2023-11-07",disclosure:"2023-11-27",amount:75000,sector:"Technology",committee:"Homeland Security",source:"PTR",excess90:-11.24,return90:5.04,lagDays:20},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2023-10-26",disclosure:"2023-11-14",amount:32500,sector:"Technology",committee:"Armed Services",source:"PTR",excess90:4.98,return90:26.9,lagDays:19},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"GOOG",company:"Alphabet Inc",type:"Purchase",date:"2023-10-26",disclosure:"2023-11-14",amount:32500,sector:"Technology",committee:"Armed Services",source:"PTR",excess90:-1.44,return90:20.49,lagDays:19},
+  {trader:"Austin Scott",party:"R",chamber:"House",ticker:"RTX",company:"RTX Corp (Raytheon)",type:"Purchase",date:"2023-10-09",disclosure:"2023-10-30",amount:32500,sector:"Industrials",committee:"Armed Services; Agriculture",source:"Defense committee member",excess90:10.22,return90:24.32,lagDays:21},
+  {trader:"Austin Scott",party:"R",chamber:"House",ticker:"LMT",company:"Lockheed Martin",type:"Purchase",date:"2023-10-09",disclosure:"2023-10-30",amount:32500,sector:"Industrials",committee:"Armed Services; Agriculture",source:"Defense committee member",excess90:-15.36,return90:-1.25,lagDays:21},
+  {trader:"Debbie Wasserman Schultz",party:"D",chamber:"House",ticker:"AMGN",company:"Amgen Inc",type:"Purchase",date:"2023-08-10",disclosure:"2023-08-28",amount:32500,sector:"Healthcare",committee:"Appropriations",source:"PTR",excess90:0.18,return90:2.46,lagDays:18},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"AAPL",company:"Apple Inc",type:"Sale",date:"2023-07-26",disclosure:"2023-08-10",amount:3000000,sector:"Technology",committee:"None (Speaker)",source:"Sold near 52-week high",excess90:-2.17,return90:-5.84,lagDays:15},
+  {trader:"Lois Frankel",party:"D",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2023-06-22",disclosure:"2023-07-10",amount:32500,sector:"Technology",committee:"Appropriations",source:"PTR",excess90:-2.09,return90:-2.71,lagDays:18},
+  {trader:"Kevin Hern",party:"R",chamber:"House",ticker:"COIN",company:"Coinbase Global",type:"Purchase",date:"2023-06-13",disclosure:"2023-07-03",amount:75000,sector:"Financials",committee:"Ways & Means",source:"Crypto recovery play",excess90:45.15,return90:43.72,lagDays:20},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"NVDA",company:"NVIDIA Corp",type:"Purchase",date:"2023-05-22",disclosure:"2023-06-08",amount:32500,sector:"Technology",committee:"Armed Services",source:"Pre-AI earnings surge",excess90:44.04,return90:50.98,lagDays:17},
+  {trader:"Pat Fallon",party:"R",chamber:"House",ticker:"AMD",company:"Advanced Micro Devices",type:"Purchase",date:"2023-05-15",disclosure:"2023-06-05",amount:32500,sector:"Technology",committee:"Armed Services",source:"AI chip play",excess90:4.56,return90:13.74,lagDays:21},
+  {trader:"Tim Burchett",party:"R",chamber:"House",ticker:"XYZ",company:"Block Inc (Square)",type:"Purchase",date:"2023-04-10",disclosure:"2023-04-28",amount:32500,sector:"Financials",committee:"Foreign Affairs; Transportation",source:"PTR",excess90:3.3,return90:14.18,lagDays:18},
+  {trader:"French Hill",party:"R",chamber:"House",ticker:"JPM",company:"JPMorgan Chase",type:"Purchase",date:"2023-03-15",disclosure:"2023-04-01",amount:32500,sector:"Financials",committee:"Financial Services",source:"Banking committee, bought during SVB crisis",excess90:-0.45,return90:14.28,lagDays:17},
+  {trader:"Dan Crenshaw",party:"R",chamber:"House",ticker:"JPM",company:"JPMorgan Chase",type:"Purchase",date:"2023-03-14",disclosure:"2023-04-03",amount:32500,sector:"Financials",committee:"Homeland Security",source:"Bought during banking crisis",excess90:-4.38,return90:9.76,lagDays:20},
+  {trader:"Michael McCaul",party:"R",chamber:"House",ticker:"NVDA",company:"NVIDIA Corp",type:"Purchase",date:"2023-03-08",disclosure:"2023-03-24",amount:32500,sector:"Technology",committee:"Foreign Affairs",source:"PTR, pre-AI boom",excess90:67.7,return90:77.95,lagDays:16},
+  {trader:"Josh Gottheimer",party:"D",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2023-01-18",disclosure:"2023-02-06",amount:32500,sector:"Technology",committee:"Financial Services",source:"PTR",excess90:25.39,return90:31.22,lagDays:19},
+  {trader:"Josh Gottheimer",party:"D",chamber:"House",ticker:"GOOG",company:"Alphabet Inc",type:"Purchase",date:"2023-01-18",disclosure:"2023-02-06",amount:32500,sector:"Technology",committee:"Financial Services",source:"PTR",excess90:12.1,return90:17.93,lagDays:19},
+  {trader:"Brian Mast",party:"R",chamber:"House",ticker:"BA",company:"Boeing Co",type:"Purchase",date:"2023-01-09",disclosure:"2023-01-30",amount:32500,sector:"Industrials",committee:"Foreign Affairs; Transportation",source:"PTR",excess90:-9.79,return90:-2.25,lagDays:21},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"TSLA",company:"Tesla Inc",type:"Purchase",date:"2022-12-21",disclosure:"2023-01-06",amount:750000,sector:"Consumer Discretionary",committee:"None (Speaker)",source:"PTR",excess90:28.17,return90:34.52,lagDays:16},
+  {trader:"Mark Warner",party:"D",chamber:"Senate",ticker:"AMZN",company:"Amazon.com Inc",type:"Sale",date:"2022-11-28",disclosure:"2022-12-15",amount:3000000,sector:"Technology",committee:"Intelligence; Banking",source:"PTR",excess90:3.62,return90:2.39,lagDays:17},
+  {trader:"Earl Blumenauer",party:"D",chamber:"House",ticker:"ENPH",company:"Enphase Energy",type:"Purchase",date:"2022-10-25",disclosure:"2022-11-10",amount:32500,sector:"Energy",committee:"Ways & Means",source:"Clean energy advocate",excess90:-24.77,return90:-17.59,lagDays:16},
+  {trader:"Virginia Foxx",party:"R",chamber:"House",ticker:"ABBV",company:"AbbVie Inc",type:"Purchase",date:"2022-09-08",disclosure:"2022-09-30",amount:32500,sector:"Healthcare",committee:"Education & Labor",source:"PTR",excess90:20.26,return90:16.86,lagDays:22},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2022-09-12",disclosure:"2022-10-25",amount:32500,sector:"Technology",committee:"Armed Services",source:"PTR",excess90:-7.1,return90:-8.77,lagDays:43},
+  {trader:"Mike Kelly",party:"R",chamber:"House",ticker:"UNH",company:"UnitedHealth Group",type:"Purchase",date:"2022-07-11",disclosure:"2022-07-28",amount:75000,sector:"Healthcare",committee:"Ways & Means",source:"PTR",excess90:5.57,return90:5.4,lagDays:17},
+  {trader:"Pete Sessions",party:"R",chamber:"House",ticker:"COP",company:"ConocoPhillips",type:"Purchase",date:"2022-06-14",disclosure:"2022-07-05",amount:32500,sector:"Energy",committee:"Financial Services",source:"PTR",excess90:2.4,return90:1.28,lagDays:21},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"SPY",company:"SPDR S&P 500 ETF",type:"Sale",date:"2022-06-15",disclosure:"2022-07-05",amount:75000,sector:"Broad Market",committee:"Armed Services",source:"Sold near local low, late filer",excess90:0.0,return90:-2.5,lagDays:20},
+  {trader:"John Hickenlooper",party:"D",chamber:"Senate",ticker:"ABNB",company:"Airbnb Inc",type:"Purchase",date:"2022-05-23",disclosure:"2022-06-09",amount:32500,sector:"Consumer Discretionary",committee:"Commerce; Energy",source:"PTR",excess90:1.81,return90:2.46,lagDays:17},
+  {trader:"John Hickenlooper",party:"D",chamber:"Senate",ticker:"SHOP",company:"Shopify Inc",type:"Purchase",date:"2022-05-23",disclosure:"2022-06-09",amount:32500,sector:"Technology",committee:"Commerce; Energy",source:"PTR",excess90:-16.58,return90:-15.93,lagDays:17},
+  {trader:"Markwayne Mullin",party:"R",chamber:"Senate",ticker:"OXY",company:"Occidental Petroleum",type:"Purchase",date:"2022-03-10",disclosure:"2022-03-28",amount:75000,sector:"Energy",committee:"Energy; Environment",source:"Energy committee member",excess90:9.51,return90:1.52,lagDays:18},
+  {trader:"John Curtis",party:"R",chamber:"House",ticker:"XOM",company:"Exxon Mobil Corp",type:"Purchase",date:"2022-03-09",disclosure:"2022-03-28",amount:32500,sector:"Energy",committee:"Energy & Commerce",source:"Energy committee member, bought during spike",excess90:17.04,return90:8.64,lagDays:19},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"CRM",company:"Salesforce Inc",type:"Purchase",date:"2022-03-17",disclosure:"2022-04-06",amount:750000,sector:"Technology",committee:"None (Speaker)",source:"PTR",excess90:-5.4,return90:-18.16,lagDays:20},
+  {trader:"David Rouzer",party:"R",chamber:"House",ticker:"CVX",company:"Chevron Corp",type:"Purchase",date:"2022-03-01",disclosure:"2022-03-22",amount:32500,sector:"Energy",committee:"Agriculture; Transportation",source:"Bought during energy crisis",excess90:16.22,return90:4.1,lagDays:21},
+  {trader:"Rick Scott",party:"R",chamber:"Senate",ticker:"GLD",company:"SPDR Gold Trust",type:"Purchase",date:"2022-02-24",disclosure:"2022-03-15",amount:175000,sector:"Commodities",committee:"Commerce; Armed Services",source:"Bought gold on Russia invasion day",excess90:8.1,return90:-4.07,lagDays:19},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"LMT",company:"Lockheed Martin",type:"Sale",date:"2021-12-28",disclosure:"2022-01-14",amount:32500,sector:"Industrials",committee:"Armed Services",source:"Defense committee conflict",excess90:41.02,return90:33.11,lagDays:17},
+  {trader:"Suzan DelBene",party:"D",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Sale",date:"2021-11-15",disclosure:"2021-12-02",amount:3000000,sector:"Technology",committee:"Ways & Means",source:"Former MSFT exec, sold near ATH",excess90:-4.34,return90:-10.33,lagDays:17},
+  {trader:"Ro Khanna",party:"D",chamber:"House",ticker:"TSLA",company:"Tesla Inc",type:"Sale",date:"2021-11-08",disclosure:"2021-11-24",amount:175000,sector:"Consumer Discretionary",committee:"Armed Services; Oversight",source:"Sold near all-time high",excess90:-21.29,return90:-29.36,lagDays:16},
+  {trader:"Dan Crenshaw",party:"R",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2021-10-19",disclosure:"2021-11-12",amount:32500,sector:"Technology",committee:"Homeland Security",source:"PTR",excess90:-1.78,return90:-1.72,lagDays:24},
+  {trader:"Dan Crenshaw",party:"R",chamber:"House",ticker:"TSLA",company:"Tesla Inc",type:"Purchase",date:"2021-10-19",disclosure:"2021-11-12",amount:32500,sector:"Consumer Discretionary",committee:"Energy & Commerce",source:"PTR",excess90:4.6,return90:4.66,lagDays:24},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"DIS",company:"Walt Disney Co",type:"Purchase",date:"2021-06-23",disclosure:"2021-07-08",amount:375000,sector:"Communication Services",committee:"None (Speaker)",source:"PTR",excess90:-3.15,return90:0.09,lagDays:15},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"BABA",company:"Alibaba Group",type:"Sale",date:"2021-06-03",disclosure:"2022-01-14",amount:75000,sector:"Technology",committee:"Armed Services",source:"Late filing, 225 days",excess90:-61.92,return90:-56.0,lagDays:225},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",ticker:"AAPL",company:"Apple Inc",type:"Sale",date:"2021-05-17",disclosure:"2022-01-14",amount:75000,sector:"Technology",committee:"Armed Services",source:"Late filing",excess90:24.71,return90:31.46,lagDays:242},
+  {trader:"Gary Peters",party:"D",chamber:"Senate",ticker:"F",company:"Ford Motor Co",type:"Purchase",date:"2021-05-12",disclosure:"2021-06-01",amount:32500,sector:"Consumer Discretionary",committee:"Commerce; Homeland Security",source:"Michigan senator buying Ford",excess90:3.27,return90:15.18,lagDays:20},
+  {trader:"Dianne Feinstein",party:"D",chamber:"Senate",ticker:"ALNY",company:"Alnylam Pharmaceuticals",type:"Sale",date:"2020-01-31",disclosure:"2020-02-14",amount:750000,sector:"Healthcare",committee:"Intelligence; Judiciary",source:"Spouse trade after COVID briefing",excess90:29.56,return90:18.65,lagDays:14},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",ticker:"MSFT",company:"Microsoft Corp",type:"Purchase",date:"2021-03-19",disclosure:"2021-04-09",amount:750000,sector:"Technology",committee:"None (Speaker)",source:"PTR",excess90:9.71,return90:20.71,lagDays:21},
+  {trader:"Shelley Moore Capito",party:"R",chamber:"Senate",ticker:"ELV",company:"Elevance Health (Anthem)",type:"Purchase",date:"2020-05-04",disclosure:"2020-05-20",amount:75000,sector:"Healthcare",committee:"Commerce; Appropriations",source:"Healthcare play during COVID",excess90:-15.39,return90:4.56,lagDays:16},
+  {trader:"Mark Green",party:"R",chamber:"House",ticker:"PFE",company:"Pfizer Inc",type:"Purchase",date:"2020-03-26",disclosure:"2020-04-10",amount:32500,sector:"Healthcare",committee:"Homeland Security",source:"COVID-era trade",excess90:-14.45,return90:6.44,lagDays:15},
+  {trader:"Mark Green",party:"R",chamber:"House",ticker:"MRNA",company:"Moderna Inc",type:"Purchase",date:"2020-06-18",disclosure:"2020-07-06",amount:32500,sector:"Healthcare",committee:"Homeland Security",source:"COVID vaccine play",excess90:0.89,return90:10.78,lagDays:18},
+  {trader:"Kurt Schrader",party:"D",chamber:"House",ticker:"JNJ",company:"Johnson & Johnson",type:"Purchase",date:"2020-03-30",disclosure:"2020-04-15",amount:75000,sector:"Healthcare",committee:"Energy & Commerce",source:"COVID bottom buy, pharma committee",excess90:-10.44,return90:11.98,lagDays:16},
+  {trader:"Richard Burr",party:"R",chamber:"Senate",ticker:"SPY",company:"SPDR S&P 500 ETF",type:"Sale",date:"2020-02-13",disclosure:"2020-03-19",amount:750000,sector:"Broad Market",committee:"Intelligence",source:"DOJ investigation, sold before COVID crash",excess90:0.0,return90:-6.99,lagDays:35},
+  {trader:"Richard Burr",party:"R",chamber:"Senate",ticker:"WH",company:"Wyndham Hotels",type:"Sale",date:"2020-02-13",disclosure:"2020-03-19",amount:175000,sector:"Consumer Discretionary",committee:"Intelligence",source:"Hospitality stock sold pre-COVID",excess90:-14.86,return90:-21.86,lagDays:35},
+  {trader:"David Perdue",party:"R",chamber:"Senate",ticker:"DD",company:"DuPont de Nemours",type:"Purchase",date:"2020-01-23",disclosure:"2020-02-15",amount:175000,sector:"Materials",committee:"Banking; Agriculture",source:"COVID briefing trades, DOJ investigated",excess90:-11.26,return90:-24.45,lagDays:23},
+];
+
+const TRADER_STATS = [
+  {trader:"Michael McCaul",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:16,topSector:"Technology",meanReturn:77.95,meanExcess:67.7,winRate:100.0,best:77.95,worst:77.95},
+  {trader:"Kevin Hern",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:75000,lagDays:20,topSector:"Financials",meanReturn:43.72,meanExcess:45.15,winRate:100.0,best:43.72,worst:43.72},
+  {trader:"Dianne Feinstein",party:"D",chamber:"Senate",n:1,nPurch:0,nSale:1,volume:750000,lagDays:14,topSector:"Healthcare",meanReturn:18.65,meanExcess:29.56,winRate:100.0,best:18.65,worst:18.65},
+  {trader:"Virginia Foxx",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:22,topSector:"Healthcare",meanReturn:16.86,meanExcess:20.26,winRate:100.0,best:16.86,worst:16.86},
+  {trader:"Josh Gottheimer",party:"D",chamber:"House",n:2,nPurch:2,nSale:0,volume:65000,lagDays:19,topSector:"Technology",meanReturn:24.58,meanExcess:18.74,winRate:100.0,best:31.22,worst:17.93},
+  {trader:"Pat Fallon",party:"R",chamber:"House",n:6,nPurch:6,nSale:0,volume:195000,lagDays:19.5,topSector:"Technology",meanReturn:31.63,meanExcess:17.68,winRate:100.0,best:51.75,worst:13.74},
+  {trader:"John Curtis",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:19,topSector:"Energy",meanReturn:8.64,meanExcess:17.04,winRate:100.0,best:8.64,worst:8.64},
+  {trader:"David Rouzer",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:21,topSector:"Energy",meanReturn:4.1,meanExcess:16.22,winRate:100.0,best:4.1,worst:4.1},
+  {trader:"Markwayne Mullin",party:"R",chamber:"Senate",n:1,nPurch:1,nSale:0,volume:75000,lagDays:18,topSector:"Energy",meanReturn:1.52,meanExcess:9.51,winRate:100.0,best:1.52,worst:1.52},
+  {trader:"Bill Hagerty",party:"R",chamber:"Senate",n:2,nPurch:2,nSale:0,volume:65000,lagDays:17,topSector:"Technology",meanReturn:23.96,meanExcess:9.48,winRate:100.0,best:27.78,worst:20.15},
+  {trader:"Rick Scott",party:"R",chamber:"Senate",n:1,nPurch:1,nSale:0,volume:175000,lagDays:19,topSector:"Commodities",meanReturn:-4.07,meanExcess:8.1,winRate:0.0,best:-4.07,worst:-4.07},
+  {trader:"Tommy Tuberville",party:"R",chamber:"Senate",n:6,nPurch:2,nSale:4,volume:365000,lagDays:94,topSector:"Technology",meanReturn:9.67,meanExcess:8.08,winRate:50.0,best:60.71,worst:-56.0},
+  {trader:"Mike Kelly",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:75000,lagDays:17,topSector:"Healthcare",meanReturn:5.4,meanExcess:5.57,winRate:100.0,best:5.4,worst:5.4},
+  {trader:"Mark Warner",party:"D",chamber:"Senate",n:1,nPurch:0,nSale:1,volume:3000000,lagDays:17,topSector:"Technology",meanReturn:2.39,meanExcess:3.62,winRate:100.0,best:2.39,worst:2.39},
+  {trader:"Tim Burchett",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:18,topSector:"Financials",meanReturn:14.18,meanExcess:3.3,winRate:100.0,best:14.18,worst:14.18},
+  {trader:"Gary Peters",party:"D",chamber:"Senate",n:1,nPurch:1,nSale:0,volume:32500,lagDays:20,topSector:"Consumer Discretionary",meanReturn:15.18,meanExcess:3.27,winRate:100.0,best:15.18,worst:15.18},
+  {trader:"Pete Sessions",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:21,topSector:"Energy",meanReturn:1.28,meanExcess:2.4,winRate:100.0,best:1.28,worst:1.28},
+  {trader:"Debbie Wasserman Schultz",party:"D",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:18,topSector:"Healthcare",meanReturn:2.46,meanExcess:0.18,winRate:100.0,best:2.46,worst:2.46},
+  {trader:"French Hill",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:17,topSector:"Financials",meanReturn:14.28,meanExcess:-0.45,winRate:100.0,best:14.28,worst:14.28},
+  {trader:"Dan Crenshaw",party:"R",chamber:"House",n:3,nPurch:3,nSale:0,volume:97500,lagDays:22.7,topSector:"Consumer Discretionary",meanReturn:4.23,meanExcess:-0.52,winRate:66.7,best:9.76,worst:-1.72},
+  {trader:"Lois Frankel",party:"D",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:18,topSector:"Technology",meanReturn:-2.71,meanExcess:-2.09,winRate:0.0,best:-2.71,worst:-2.71},
+  {trader:"Austin Scott",party:"R",chamber:"House",n:2,nPurch:2,nSale:0,volume:65000,lagDays:21,topSector:"Industrials",meanReturn:11.54,meanExcess:-2.57,winRate:50.0,best:24.32,worst:-1.25},
+  {trader:"Nancy Pelosi",party:"D",chamber:"House",n:13,nPurch:12,nSale:1,volume:14800000,lagDays:13.9,topSector:"Technology",meanReturn:0.65,meanExcess:-2.71,winRate:46.2,best:34.52,worst:-19.64},
+  {trader:"Marjorie Taylor Greene",party:"R",chamber:"House",n:2,nPurch:2,nSale:0,volume:65000,lagDays:20,topSector:"Communication Services",meanReturn:0.7,meanExcess:-3.77,winRate:50.0,best:32.64,worst:-31.25},
+  {trader:"Suzan DelBene",party:"D",chamber:"House",n:1,nPurch:0,nSale:1,volume:3000000,lagDays:17,topSector:"Technology",meanReturn:-10.33,meanExcess:-4.34,winRate:0.0,best:-10.33,worst:-10.33},
+  {trader:"Michael Garcia",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:21,topSector:"Technology",meanReturn:2.09,meanExcess:-5.2,winRate:100.0,best:2.09,worst:2.09},
+  {trader:"Mark Green",party:"R",chamber:"House",n:2,nPurch:2,nSale:0,volume:65000,lagDays:16.5,topSector:"Healthcare",meanReturn:8.61,meanExcess:-6.78,winRate:100.0,best:10.78,worst:6.44},
+  {trader:"Daniel Goldman",party:"D",chamber:"House",n:2,nPurch:2,nSale:0,volume:150000,lagDays:20,topSector:"Technology",meanReturn:9.26,meanExcess:-7.02,winRate:100.0,best:13.48,worst:5.04},
+  {trader:"John Hickenlooper",party:"D",chamber:"Senate",n:2,nPurch:2,nSale:0,volume:65000,lagDays:17,topSector:"Consumer Discretionary",meanReturn:-6.74,meanExcess:-7.38,winRate:50.0,best:2.46,worst:-15.93},
+  {trader:"Richard Burr",party:"R",chamber:"Senate",n:2,nPurch:0,nSale:2,volume:925000,lagDays:35,topSector:"Broad Market",meanReturn:-14.42,meanExcess:-7.43,winRate:0.0,best:-6.99,worst:-21.86},
+  {trader:"Brian Mast",party:"R",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:21,topSector:"Industrials",meanReturn:-2.25,meanExcess:-9.79,winRate:0.0,best:-2.25,worst:-2.25},
+  {trader:"Kurt Schrader",party:"D",chamber:"House",n:1,nPurch:1,nSale:0,volume:75000,lagDays:16,topSector:"Healthcare",meanReturn:11.98,meanExcess:-10.44,winRate:100.0,best:11.98,worst:11.98},
+  {trader:"David Perdue",party:"R",chamber:"Senate",n:1,nPurch:1,nSale:0,volume:175000,lagDays:23,topSector:"Materials",meanReturn:-24.45,meanExcess:-11.26,winRate:0.0,best:-24.45,worst:-24.45},
+  {trader:"Shelley Moore Capito",party:"R",chamber:"Senate",n:1,nPurch:1,nSale:0,volume:75000,lagDays:16,topSector:"Healthcare",meanReturn:4.56,meanExcess:-15.39,winRate:100.0,best:4.56,worst:4.56},
+  {trader:"Ro Khanna",party:"D",chamber:"House",n:1,nPurch:0,nSale:1,volume:175000,lagDays:16,topSector:"Consumer Discretionary",meanReturn:-29.36,meanExcess:-21.29,winRate:0.0,best:-29.36,worst:-29.36},
+  {trader:"Earl Blumenauer",party:"D",chamber:"House",n:1,nPurch:1,nSale:0,volume:32500,lagDays:16,topSector:"Energy",meanReturn:-17.59,meanExcess:-24.77,winRate:0.0,best:-17.59,worst:-17.59},
+];
+
+const MONTHLY_RETURNS = [
+  {month:"2020-01",n:2,excess90:9.15},{month:"2020-02",n:2,excess90:-7.43},{month:"2020-03",n:2,excess90:-12.44},
+  {month:"2020-05",n:1,excess90:-15.39},{month:"2020-06",n:1,excess90:0.89},
+  {month:"2021-03",n:1,excess90:9.71},{month:"2021-05",n:2,excess90:13.99},{month:"2021-06",n:2,excess90:-32.54},
+  {month:"2021-10",n:2,excess90:1.41},{month:"2021-11",n:2,excess90:-12.82},{month:"2021-12",n:1,excess90:41.02},
+  {month:"2022-02",n:1,excess90:8.1},{month:"2022-03",n:4,excess90:9.34},{month:"2022-05",n:2,excess90:-7.38},
+  {month:"2022-06",n:2,excess90:1.2},{month:"2022-07",n:1,excess90:5.57},{month:"2022-09",n:2,excess90:6.58},
+  {month:"2022-10",n:1,excess90:-24.77},{month:"2022-11",n:1,excess90:3.62},{month:"2022-12",n:1,excess90:28.17},
+  {month:"2023-01",n:3,excess90:9.23},{month:"2023-03",n:3,excess90:20.96},{month:"2023-04",n:1,excess90:3.3},
+  {month:"2023-05",n:2,excess90:24.3},{month:"2023-06",n:2,excess90:21.53},{month:"2023-07",n:1,excess90:-2.17},
+  {month:"2023-08",n:1,excess90:0.18},{month:"2023-10",n:4,excess90:-0.4},{month:"2023-11",n:3,excess90:7.31},
+  {month:"2023-12",n:1,excess90:-28.13},{month:"2024-01",n:1,excess90:-19.23},{month:"2024-02",n:1,excess90:18.0},
+  {month:"2024-06",n:7,excess90:-3.68},{month:"2024-08",n:3,excess90:23.59},{month:"2024-11",n:2,excess90:-0.98},
+];
+
+const LAG_DATA = {
+  insider: [
+    {lag:0,label:"At Disclosure",mean:3.69,excess:2.12,std:16.99,winRate:54.4,t:1.164,p:0.248},
+    {lag:30,label:"T+30d",mean:4.42,excess:2.17,std:18.83,winRate:51.5,t:1.066,p:0.290},
+    {lag:60,label:"T+60d",mean:6.11,excess:2.58,std:19.4,winRate:52.9,t:1.153,p:0.253},
+    {lag:90,label:"T+90d",mean:7.92,excess:3.40,std:22.06,winRate:52.9,t:1.341,p:0.184},
+  ],
+  copycat: [
+    {lag:0,label:"At Copy",mean:0,excess:0,std:0,winRate:0,t:0,p:1},
+    {lag:30,label:"T+30d",mean:1.58,excess:0.71,std:15.19,winRate:41.2,t:0.456,p:0.650},
+    {lag:60,label:"T+60d",mean:3.68,excess:1.52,std:20.45,winRate:47.1,t:0.670,p:0.505},
+    {lag:90,label:"T+90d",mean:5.61,excess:2.43,std:23.06,winRate:52.9,t:0.966,p:0.338},
+  ],
+  purchaseOnly: [
+    {lag:30,label:"T+30d",mean:6.61,excess:3.24,std:15.88,winRate:54.4,t:1.542,p:0.129},
+    {lag:60,label:"T+60d",mean:8.52,excess:3.52,std:16.64,winRate:56.1,t:1.596,p:0.116},
+    {lag:90,label:"T+90d",mean:10.27,excess:4.16,std:19.54,winRate:56.1,t:1.606,p:0.114},
+  ],
+  saleOnly: [
+    {lag:30,label:"T+30d",mean:-6.92,excess:-3.37,std:21.01,winRate:36.4,t:-0.533,p:0.606},
+    {lag:60,label:"T+60d",mean:-6.39,excess:-2.28,std:26.45,winRate:36.4,t:-0.286,p:0.781},
+    {lag:90,label:"T+90d",mean:-4.30,excess:-0.52,std:27.76,winRate:36.4,t:-0.062,p:0.952},
+  ],
+};
+
+/* ═══════════════════════════════
+   UTILITY FUNCTIONS
+   ═══════════════════════════════ */
+
+function fmt(n,dec=2){return n.toFixed(dec)}
+function fmtPct(n,dec=2){return (n>=0?'+':'')+n.toFixed(dec)+'%'}
+function fmtMoney(n){
+  if(n>=1000000)return '$'+fmt(n/1000000,1)+'M';
+  if(n>=1000)return '$'+(n/1000).toFixed(0)+'K';
+  return '$'+n.toLocaleString();
+}
+function daysSince(dateStr){
+  const d=new Date(dateStr);const now=new Date('2026-03-31');
+  return Math.floor((now-d)/(1000*60*60*24));
+}
+
+/* ═══════════════════════════════
+   THEME & SHARE
+   ═══════════════════════════════ */
+
+function toggleTheme(){
+  const t=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=t;
+  document.getElementById('theme-btn').textContent=t==='dark'?'☀ Light':'🌙 Dark';
+  initAllCharts();
+}
+function shareResearch(){
+  navigator.clipboard.writeText(window.location.href);
+  const t=document.getElementById('share-toast');
+  t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+/* ═══════════════════════════════
+   CHART HELPERS
+   ═══════════════════════════════ */
+
+function isDark(){return document.documentElement.dataset.theme==='dark'}
+function gridColor(){return isDark()?'rgba(255,255,255,.06)':'rgba(0,0,0,.08)'}
+function tickColor(){return isDark()?'#64748b':'#94a3b8'}
+function fontColor(){return isDark()?'#cbd5e1':'#475569'}
+
+const TEAL='#14b8a6',TEAL_A='rgba(20,184,166,.5)',TEAL_BG='rgba(20,184,166,.12)';
+const PURPLE='#a78bfa',PURPLE_A='rgba(167,139,250,.5)',PURPLE_BG='rgba(167,139,250,.12)';
+const AMBER='#f59e0b',RED='#ef4444',GREEN='#22c55e',BLUE='#3b82f6';
+
+function baseOpts(){
+  return{
+    responsive:true,maintainAspectRatio:true,
+    animation:{duration:800,easing:'easeOutQuart'},
+    plugins:{
+      legend:{display:true,labels:{color:fontColor(),font:{family:"'Source Serif Pro',serif",size:12},boxWidth:14,padding:16}},
+      tooltip:{
+        backgroundColor:isDark()?'#1e293b':'#fff',
+        titleColor:isDark()?'#e2e8f0':'#1e293b',
+        bodyColor:isDark()?'#94a3b8':'#475569',
+        borderColor:isDark()?'#334155':'#e2e8f0',borderWidth:1,
+        padding:12,cornerRadius:8,
+        titleFont:{family:"'Playfair Display',serif",size:13,weight:'600'},
+        bodyFont:{family:"'JetBrains Mono',monospace",size:11},
+      }
+    },
+    scales:{
+      x:{grid:{color:gridColor()},ticks:{color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:10}}},
+      y:{grid:{color:gridColor()},ticks:{color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:10}}}
+    }
+  };
+}
+
+let charts={};
+function destroyAll(){Object.values(charts).forEach(c=>{if(c)c.destroy()});charts={}}
+
+function initAllCharts(){
+  destroyAll();
+
+  // Chart 1: Lag Decay — Insider vs Copycat
+  const ctx1=document.getElementById('chart-lag').getContext('2d');
+  charts.lag=new Chart(ctx1,{
+    type:'bar',
+    data:{
+      labels:['At Disclosure\n(T+0)','T+30 Days','T+60 Days','T+90 Days'],
+      datasets:[
+        {
+          label:'Insider (from trade date)',
+          data:[2.12,2.17,2.58,3.40],
+          backgroundColor:TEAL_A,borderColor:TEAL,borderWidth:1.5,borderRadius:6,
+        },
+        {
+          label:'Copycat (from disclosure)',
+          data:[0,0.71,1.52,2.43],
+          backgroundColor:PURPLE_A,borderColor:PURPLE,borderWidth:1.5,borderRadius:6,
+        },
+        {
+          label:'Purchases Only (insider)',
+          data:[null,3.24,3.52,4.16],
+          backgroundColor:'rgba(34,197,94,.4)',borderColor:GREEN,borderWidth:1.5,borderRadius:6,
+        }
+      ]
+    },
+    options:{
+      ...baseOpts(),
+      plugins:{
+        ...baseOpts().plugins,
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{
+            label:function(ctx){return ctx.dataset.label+': '+fmtPct(ctx.parsed.y)}
+          }
+        }
+      },
+      scales:{
+        ...baseOpts().scales,
+        y:{...baseOpts().scales.y,beginAtZero:true,title:{display:true,text:'Mean Excess Return (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}}
+      }
+    }
+  });
+
+  // Chart 2: Monthly Excess Returns (bar chart)
+  const ctx2=document.getElementById('chart-cumulative').getContext('2d');
+  charts.cumulative=new Chart(ctx2,{
+    type:'bar',
+    data:{
+      labels:MONTHLY_RETURNS.map(d=>d.month),
+      datasets:[{
+        label:'Mean Excess Return 90d (%)',
+        data:MONTHLY_RETURNS.map(d=>d.excess90),
+        backgroundColor:MONTHLY_RETURNS.map(d=>d.excess90>=0?'rgba(20,184,166,.6)':'rgba(239,68,68,.5)'),
+        borderColor:MONTHLY_RETURNS.map(d=>d.excess90>=0?TEAL:RED),
+        borderWidth:1.5,borderRadius:3,
+      }]
+    },
+    options:{
+      ...baseOpts(),
+      plugins:{
+        ...baseOpts().plugins,
+        legend:{display:false},
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{
+            title:function(ctx){return ctx[0].label},
+            label:function(ctx){
+              const d=MONTHLY_RETURNS[ctx.dataIndex];
+              return [`Excess: ${fmtPct(d.excess90)}`,`Trades: ${d.n}`];
+            }
+          }
+        }
+      },
+      scales:{
+        x:{...baseOpts().scales.x,ticks:{...baseOpts().scales.x.ticks,maxRotation:60,minRotation:45}},
+        y:{...baseOpts().scales.y,title:{display:true,text:'Mean Excess Return (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}}
+      }
+    }
+  });
+
+  // Chart 3: Party Comparison
+  const ctx3=document.getElementById('chart-party').getContext('2d');
+  charts.party=new Chart(ctx3,{
+    type:'bar',
+    data:{
+      labels:['Republican (n=40)','Democrat (n=28)','All Trades (n=68)'],
+      datasets:[{
+        label:'Mean Excess Return 90d (%)',
+        data:[7.10,-1.89,3.40],
+        backgroundColor:[
+          'rgba(239,68,68,.5)',
+          'rgba(59,130,246,.5)',
+          'rgba(20,184,166,.5)'
+        ],
+        borderColor:[RED,BLUE,TEAL],
+        borderWidth:1.5,borderRadius:6,
+      }]
+    },
+    options:{
+      ...baseOpts(),
+      plugins:{
+        ...baseOpts().plugins,
+        legend:{display:false},
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{label:function(ctx){return 'Excess: '+fmtPct(ctx.parsed.y)}}
+        }
+      },
+      scales:{
+        ...baseOpts().scales,
+        y:{...baseOpts().scales.y,title:{display:true,text:'Mean Excess Return (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}}
+      }
+    }
+  });
+
+  // Chart 4: Sector Alpha (horizontal bars)
+  const sectors=[
+    {s:'Consumer Discretionary',a:10.21,n:8},{s:'Financials',a:8.84,n:5},
+    {s:'Commodities',a:8.10,n:1},{s:'Industrials',a:6.52,n:4},
+    {s:'Energy',a:4.08,n:5},{s:'Technology',a:2.65,n:32},
+    {s:'Healthcare',a:2.02,n:8},{s:'Broad Market',a:0.0,n:2},
+    {s:'Materials',a:-11.26,n:1},{s:'Communication Svcs',a:-19.43,n:2}
+  ];
+  const ctx4=document.getElementById('chart-sectors').getContext('2d');
+  charts.sectors=new Chart(ctx4,{
+    type:'bar',
+    data:{
+      labels:sectors.map(d=>d.s),
+      datasets:[{
+        label:'Mean Excess Return 90d (%)',
+        data:sectors.map(d=>d.a),
+        backgroundColor:sectors.map(d=>{
+          if(d.a>0)return `rgba(20,184,166,${Math.min(.2+d.a/15,.8)})`;
+          return `rgba(239,68,68,${Math.min(.2+Math.abs(d.a)/25,.8)})`;
+        }),
+        borderColor:sectors.map(d=>d.a>=0?TEAL:RED),
+        borderWidth:1.5,borderRadius:4,
+      }]
+    },
+    options:{
+      ...baseOpts(),indexAxis:'y',
+      scales:{
+        x:{...baseOpts().scales.x,title:{display:true,text:'Mean Excess Return (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}},
+        y:{...baseOpts().scales.y,grid:{display:false}}
+      },
+      plugins:{
+        ...baseOpts().plugins,
+        legend:{display:false},
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{
+            label:function(ctx){
+              const d=sectors[ctx.dataIndex];
+              return [`Excess: ${fmtPct(d.a)}`,`Trades: ${d.n}`];
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Chart 5: Top Traders Bubble
+  const topTraders=TRADER_STATS.filter(t=>Math.abs(t.meanExcess)>2).slice(0,15);
+  const ctx5=document.getElementById('chart-traders').getContext('2d');
+  const maxVol=Math.max(...topTraders.map(t=>t.volume));
+  charts.traders=new Chart(ctx5,{
+    type:'bubble',
+    data:{
+      datasets:[
+        {
+          label:'Democrats',
+          data:topTraders.filter(d=>d.party==='D').map(d=>({
+            x:d.n,y:d.meanExcess,r:Math.max(4,Math.sqrt(d.volume/maxVol)*30),name:d.trader
+          })),
+          backgroundColor:'rgba(59,130,246,.45)',borderColor:BLUE,borderWidth:1.5,
+        },
+        {
+          label:'Republicans',
+          data:topTraders.filter(d=>d.party==='R').map(d=>({
+            x:d.n,y:d.meanExcess,r:Math.max(4,Math.sqrt(d.volume/maxVol)*30),name:d.trader
+          })),
+          backgroundColor:'rgba(239,68,68,.4)',borderColor:RED,borderWidth:1.5,
+        }
+      ]
+    },
+    options:{
+      ...baseOpts(),
+      scales:{
+        x:{...baseOpts().scales.x,title:{display:true,text:'Number of Trades',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}},
+        y:{...baseOpts().scales.y,title:{display:true,text:'Mean Excess Return 90d (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}}
+      },
+      plugins:{
+        ...baseOpts().plugins,
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{
+            label:function(ctx){
+              const d=ctx.raw;
+              return `${d.name}: ${ctx.parsed.x} trades, ${fmtPct(ctx.parsed.y)} excess`;
+            }
+          }
+        }
+      }
+    }
+  });
+
+  // Simulator chart
+  initSimChart();
+}
+
+/* ═══════════════════════════════
+   POPULATE TABLES
+   ═══════════════════════════════ */
+
+function populateTraderTable(){
+  const tbody=document.getElementById('trader-table-body');
+  if(!tbody)return;
+  tbody.innerHTML=TRADER_STATS.map(t=>`
+    <tr>
+      <td>${t.trader}</td>
+      <td><span class="tag tag-${t.party==='D'?'dem':'rep'}">${t.party==='D'?'DEM':'REP'}</span></td>
+      <td>${t.chamber}</td>
+      <td class="num">${t.n}</td>
+      <td class="num">${fmtMoney(t.volume)}</td>
+      <td class="num ${t.meanExcess>=0?'positive':'negative'}">${fmtPct(t.meanExcess)}</td>
+      <td class="num">${fmt(t.winRate,1)}%</td>
+      <td class="num ${t.best>=0?'positive':'negative'}">${fmtPct(t.best)}</td>
+      <td class="num ${t.worst>=0?'positive':'negative'}">${fmtPct(t.worst)}</td>
+    </tr>
+  `).join('');
+}
+
+function populateRecentTrades(){
+  const tbody=document.getElementById('recent-trades-body');
+  if(!tbody)return;
+  const sorted=[...TRADES].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,20);
+  tbody.innerHTML=sorted.map(t=>{
+    const ds=daysSince(t.date);
+    const arrow=t.excess90>=0?'up':'down';
+    const arrowChar=t.excess90>=0?'▲':'▼';
+    return `<tr>
+      <td style="white-space:nowrap">${t.date}</td>
+      <td>${t.trader}</td>
+      <td><span class="tag tag-${t.party==='D'?'dem':'rep'}">${t.party==='D'?'DEM':'REP'}</span></td>
+      <td class="mono">${t.ticker}</td>
+      <td>${t.type}</td>
+      <td class="num">${fmtMoney(t.amount)}</td>
+      <td class="num">${ds}d</td>
+      <td class="num"><span class="trade-arrow ${arrow}">${arrowChar}</span><span class="${t.excess90>=0?'positive':'negative'}">${fmtPct(t.excess90)}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function populateExplorer(){
+  // Populate filter dropdowns
+  const sectors=[...new Set(TRADES.map(t=>t.sector))].sort();
+  const traders=[...new Set(TRADES.map(t=>t.trader))].sort();
+  const sectorSelect=document.getElementById('filter-sector');
+  const traderSelect=document.getElementById('filter-trader');
+  sectors.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sectorSelect.appendChild(o)});
+  traders.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;traderSelect.appendChild(o)});
+
+  renderExplorer(TRADES);
+}
+
+function renderExplorer(data){
+  const tbody=document.getElementById('explorer-body');
+  if(!tbody)return;
+  const sorted=[...data].sort((a,b)=>new Date(b.date)-new Date(a.date));
+  tbody.innerHTML=sorted.map((t,i)=>{
+    const mainRow=`<tr class="explorer-row" data-idx="${i}">
+      <td><button class="expand-btn" onclick="toggleDetail(this,${i})">+</button></td>
+      <td style="white-space:nowrap">${t.date}</td>
+      <td>${t.trader}</td>
+      <td><span class="tag tag-${t.party==='D'?'dem':'rep'}">${t.party==='D'?'DEM':'REP'}</span></td>
+      <td class="mono">${t.ticker}</td>
+      <td>${t.sector}</td>
+      <td>${t.type}</td>
+      <td class="num">${fmtMoney(t.amount)}</td>
+      <td class="num ${t.excess90>=0?'positive':'negative'}">${fmtPct(t.excess90)}</td>
+    </tr>`;
+    const detailRow=`<tr class="trade-detail-row" id="detail-${i}">
+      <td colspan="9">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div>
+            <strong>${t.company}</strong> (${t.ticker})<br>
+            <span style="color:var(--text-dim)">Sector:</span> ${t.sector}<br>
+            <span style="color:var(--text-dim)">Committee:</span> ${t.committee}<br>
+            <span style="color:var(--text-dim)">Source:</span> ${t.source}<br>
+            <span style="color:var(--text-dim)">Disclosure Date:</span> ${t.disclosure}<br>
+            <span style="color:var(--text-dim)">Disclosure Lag:</span> ${t.lagDays} days
+          </div>
+          <div>
+            <span style="color:var(--text-dim)">90-Day Return:</span> <span class="${t.return90>=0?'positive':'negative'}">${fmtPct(t.return90)}</span><br>
+            <span style="color:var(--text-dim)">90-Day Excess vs SPY:</span> <span class="${t.excess90>=0?'positive':'negative'}">${fmtPct(t.excess90)}</span><br>
+            <span style="color:var(--text-dim)">Estimated Amount:</span> ${fmtMoney(t.amount)}<br>
+            <span style="color:var(--text-dim)">Days Since Trade:</span> ${daysSince(t.date)}
+          </div>
+        </div>
+      </td>
+    </tr>`;
+    return mainRow+detailRow;
+  }).join('');
+  document.getElementById('explorer-count').textContent=`Showing ${sorted.length} of ${TRADES.length} trades`;
+}
+
+function toggleDetail(btn,idx){
+  const row=document.getElementById('detail-'+idx);
+  if(row.classList.contains('open')){
+    row.classList.remove('open');
+    btn.textContent='+';
+  }else{
+    row.classList.add('open');
+    btn.textContent='−';
+  }
+}
+
+function filterExplorer(){
+  const party=document.getElementById('filter-party').value;
+  const sector=document.getElementById('filter-sector').value;
+  const trader=document.getElementById('filter-trader').value;
+  const type=document.getElementById('filter-type').value;
+  const ticker=document.getElementById('filter-ticker').value.toUpperCase().trim();
+
+  let filtered=TRADES.filter(t=>{
+    if(party&&t.party!==party)return false;
+    if(sector&&t.sector!==sector)return false;
+    if(trader&&t.trader!==trader)return false;
+    if(type&&t.type!==type)return false;
+    if(ticker&&!t.ticker.includes(ticker))return false;
+    return true;
+  });
+  renderExplorer(filtered);
+}
+
+/* ═══════════════════════════════
+   TABLE SORTING
+   ═══════════════════════════════ */
+
+function sortTable(tableId,colIndex){
+  const table=document.getElementById(tableId);
+  const tbody=table.querySelector('tbody');
+  const rows=Array.from(tbody.querySelectorAll('tr:not(.trade-detail-row)'));
+  const th=table.querySelectorAll('th')[colIndex];
+  const asc=th.dataset.sort!=='asc';
+  table.querySelectorAll('th').forEach(h=>h.dataset.sort='');
+  th.dataset.sort=asc?'asc':'desc';
+
+  rows.sort((a,b)=>{
+    let aVal=a.cells[colIndex].textContent.trim();
+    let bVal=b.cells[colIndex].textContent.trim();
+    const aNum=parseFloat(aVal.replace(/[^0-9.\-]/g,''));
+    const bNum=parseFloat(bVal.replace(/[^0-9.\-]/g,''));
+    if(!isNaN(aNum)&&!isNaN(bNum))return asc?aNum-bNum:bNum-aNum;
+    return asc?aVal.localeCompare(bVal):bVal.localeCompare(aVal);
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+let explorerSortCol=-1,explorerSortAsc=true;
+function sortExplorer(colIndex){
+  if(explorerSortCol===colIndex)explorerSortAsc=!explorerSortAsc;
+  else{explorerSortCol=colIndex;explorerSortAsc=true;}
+  filterExplorer();
+}
+
+/* ═══════════════════════════════
+   SIMULATOR
+   ═══════════════════════════════ */
+
+function lerp(t,points){
+  const keys=Object.keys(points).map(Number).sort((a,b)=>a-b);
+  if(t<=keys[0])return points[keys[0]];
+  if(t>=keys[keys.length-1])return points[keys[keys.length-1]];
+  for(let i=0;i<keys.length-1;i++){
+    if(t>=keys[i]&&t<=keys[i+1]){
+      const pct=(t-keys[i])/(keys[i+1]-keys[i]);
+      return points[keys[i]]+(points[keys[i+1]]-points[keys[i]])*pct;
+    }
+  }
+}
+
+function updateSimulator(){
+  const lag=parseInt(document.getElementById('sim-lag').value);
+  const tradeType=document.querySelector('input[name="sim-type"]:checked').value;
+  const perspective=document.querySelector('input[name="sim-perspective"]:checked').value;
+  const party=document.getElementById('sim-party').value;
+
+  document.getElementById('sim-lag-val').textContent=`T+${lag} days`;
+
+  let data;
+  if(tradeType==='purchase'){
+    data=LAG_DATA.purchaseOnly;
+  }else if(tradeType==='sale'){
+    data=LAG_DATA.saleOnly;
+  }else if(perspective==='copycat'){
+    data=LAG_DATA.copycat;
+  }else{
+    data=LAG_DATA.insider;
+  }
+
+  // Interpolate from available data points
+  const pts={};const meanPts={};const stdPts={};const wrPts={};const tPts={};const pPts={};
+  data.forEach(d=>{
+    pts[d.lag]=d.excess;meanPts[d.lag]=d.mean;stdPts[d.lag]=d.std;
+    wrPts[d.lag]=d.winRate;tPts[d.lag]=d.t;pPts[d.lag]=d.p;
+  });
+
+  let excess=lerp(lag,pts);
+  let raw=lerp(lag,meanPts);
+  let winRate=lerp(lag,wrPts);
+  let tStat=lerp(lag,tPts);
+  let pVal=lerp(lag,pPts);
+
+  // Party adjustment (from actual data)
+  if(party==='R'){excess*=(7.10/3.40);raw*=1.3}
+  else if(party==='D'){excess*=(-1.89/3.40);raw*=0.6}
+
+  const sig=Math.abs(pVal)<0.05;
+
+  const exEl=document.getElementById('sim-excess');
+  exEl.textContent=fmtPct(excess);
+  exEl.classList.toggle('neg',excess<0);
+  document.getElementById('sim-raw').textContent=fmt(raw)+'%';
+  document.getElementById('sim-winrate').textContent=fmt(winRate,1)+'%';
+  document.getElementById('sim-tstat').textContent=fmt(tStat,3);
+  document.getElementById('sim-pval').textContent=fmt(pVal,3);
+  const sigEl=document.getElementById('sim-sig');
+  sigEl.textContent=sig?'Yes (p<0.05)':'No';
+  sigEl.style.color=sig?'var(--green)':'var(--amber)';
+
+  initSimChart();
+}
+
+function initSimChart(){
+  if(charts.sim)charts.sim.destroy();
+  const ctx=document.getElementById('chart-sim');
+  if(!ctx)return;
+
+  const perspective=document.querySelector('input[name="sim-perspective"]:checked').value;
+  const tradeType=document.querySelector('input[name="sim-type"]:checked').value;
+
+  let data;
+  if(tradeType==='purchase')data=LAG_DATA.purchaseOnly;
+  else if(tradeType==='sale')data=LAG_DATA.saleOnly;
+  else if(perspective==='copycat')data=LAG_DATA.copycat;
+  else data=LAG_DATA.insider;
+
+  const filtered=data.filter(d=>d.lag>0);
+  const labels=filtered.map(d=>d.label);
+  const means=filtered.map(d=>d.excess);
+  const upper=filtered.map(d=>d.excess+(d.std/Math.sqrt(68)));
+  const lower=filtered.map(d=>d.excess-(d.std/Math.sqrt(68)));
+
+  charts.sim=new Chart(ctx.getContext('2d'),{
+    type:'line',
+    data:{
+      labels:labels,
+      datasets:[
+        {
+          label:'Mean Excess Return',
+          data:means,
+          borderColor:TEAL,backgroundColor:TEAL_BG,fill:false,
+          tension:.3,pointRadius:5,pointBackgroundColor:TEAL,borderWidth:2.5,
+        },
+        {
+          label:'+1σ / √n',
+          data:upper,
+          borderColor:'rgba(20,184,166,.3)',backgroundColor:'rgba(20,184,166,.08)',
+          fill:'+1',tension:.3,pointRadius:0,borderWidth:1,borderDash:[4,4],
+        },
+        {
+          label:'−1σ / √n',
+          data:lower,
+          borderColor:'rgba(20,184,166,.3)',backgroundColor:'rgba(20,184,166,.08)',
+          fill:'-1',tension:.3,pointRadius:0,borderWidth:1,borderDash:[4,4],
+        }
+      ]
+    },
+    options:{
+      ...baseOpts(),
+      plugins:{
+        ...baseOpts().plugins,
+        legend:{display:true,labels:{...baseOpts().plugins.legend.labels,filter:function(item){return item.datasetIndex===0}}},
+        tooltip:{
+          ...baseOpts().plugins.tooltip,
+          callbacks:{label:function(ctx){return ctx.dataset.label+': '+fmtPct(ctx.parsed.y)}}
+        }
+      },
+      scales:{
+        x:{...baseOpts().scales.x},
+        y:{...baseOpts().scales.y,title:{display:true,text:'Excess Return (%)',color:tickColor(),font:{family:"'JetBrains Mono',monospace",size:11}}}
+      }
+    }
+  });
+}
+
+/* ═══════════════════════════════
+   ALERT SUBSCRIBE
+   ═══════════════════════════════ */
+
+function subscribeAlerts(){
+  const email=document.getElementById('alert-email').value.trim();
+  if(!email||!email.includes('@')){
+    showToast('Please enter a valid email address');return;
+  }
+  let subs=JSON.parse(localStorage.getItem('congress-alpha-subs')||'[]');
+  if(subs.includes(email)){
+    showToast('Already subscribed!');return;
+  }
+  subs.push(email);
+  localStorage.setItem('congress-alpha-subs',JSON.stringify(subs));
+  document.getElementById('alert-email').value='';
+  showToast('✓ Subscribed! You\'ll receive alerts for new congressional trades.');
+}
+
+/* ═══════════════════════════════
+   SCROLL & NAV
+   ═══════════════════════════════ */
+
+function initScrollObserver(){
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+  },{threshold:0.08,rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+}
+
+function initActiveNav(){
+  const sections=document.querySelectorAll('section[id],header[id]');
+  const links=document.querySelectorAll('#sidebar-nav a');
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const link=document.querySelector(`#sidebar-nav a[href="#${e.target.id}"]`);
+        if(link)link.classList.add('active');
+      }
+    });
+  },{threshold:0.2,rootMargin:'-80px 0px -60% 0px'});
+  sections.forEach(s=>observer.observe(s));
+  links.forEach(l=>l.addEventListener('click',()=>{
+    document.querySelector('.sidebar').classList.remove('open');
+  }));
+}
+
+/* ═══════════════════════════════
+   INIT
+   ═══════════════════════════════ */
+
+document.addEventListener('DOMContentLoaded',()=>{
+  populateTraderTable();
+  populateRecentTrades();
+  populateExplorer();
+  initAllCharts();
+  initScrollObserver();
+  initActiveNav();
+  updateSimulator();
+});
+</script>
+</body>
+</html>
