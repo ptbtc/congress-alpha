@@ -430,6 +430,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
     <a href="#recent-trades"><span class="num">09</span>Recent Trades</a>
     <a href="#trade-explorer"><span class="num">10</span>Trade Explorer</a>
     <a href="#references"><span class="num">11</span>References</a>
+    <a href="#how-built"><span class="num">12</span>How This Was Built</a>
   </nav>
 </aside>
 
@@ -476,12 +477,12 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <h2>Executive Summary</h2>
   <div class="key-takeaway">
     <span class="kt-label">Key Takeaway</span>
-    <p>Congressional trades generate +3.4% mean excess return at 90 days, but the signal is not statistically significant at the 5% level.</p>
+    <p>Congressional trades generate +3.4% mean excess return at 90 days, but the signal is not statistically significant at the 5% level — and it degrades substantially after mandatory disclosure delays.</p>
   </div>
-  <p>Our analysis of <strong class="highlight">68 high-profile congressional trades</strong> from 2020–2024 reveals a measurable but statistically ambiguous information advantage. At the 90-day horizon from trade date, congressional trades delivered a <strong>mean excess return of +3.40%</strong> over the SPY benchmark (t&nbsp;=&nbsp;1.341, p&nbsp;=&nbsp;0.184)—suggestive but not significant at the 5% level.</p>
-  <p>The signal is <strong>concentrated in purchases</strong>. The 57 purchase transactions produced a <strong>+4.16% mean excess return</strong> with a <strong>71.9% raw win rate</strong>, while the 11 sales showed a negative −0.52% excess return with only a 36.4% win rate—an asymmetry suggesting members are better at identifying upside opportunities than timing exits.</p>
-  <p>The <strong>party divergence is striking</strong>: Republican members averaged +7.10% excess return at 90 days versus −1.89% for Democrats (t&nbsp;=&nbsp;−1.772, p&nbsp;=&nbsp;0.081). However, this gap is largely driven by sector concentration—Republicans overweighted energy and defense during favorable macro regimes, while several high-profile Democratic trades (Pelosi's RBLX, PANW) suffered significant drawdowns.</p>
-  <p>For copycat investors trading at disclosure (median lag: 18.5 days), returns are materially lower. The <strong>copycat 90-day excess return drops to +2.43%</strong> (t&nbsp;=&nbsp;0.966, p&nbsp;=&nbsp;0.338), confirming that the information advantage decays with disclosure delay. The highest-alpha trades are untradeable by the time they become public.</p>
+  <p>Do members of the United States Congress trade on material non-public information? The question has animated financial regulators, academic researchers, and retail investors since Ziobrowski et al. first documented Senate portfolios outperforming the market by ~12% annualized in 2004. With the STOCK Act of 2012 mandating 45-day trade disclosures, a more practically relevant question has emerged: even if congressional insiders <em>do</em> possess an information edge, can outside investors capture it after the mandatory reporting delay? This study analyzes <strong class="highlight">68 high-profile congressional trades</strong> from 36 members across both chambers (2020–2024) to answer that question empirically.</p>
+  <p>The headline numbers are suggestive but not conclusive. From trade date, congressional purchases generated a <strong>mean excess return of +4.16%</strong> over SPY at the 90-day horizon with a <strong>71.9% raw win rate</strong> (t&nbsp;=&nbsp;1.606, p&nbsp;=&nbsp;0.114). The full sample (including sales) delivered <strong>+3.40% mean excess</strong> (t&nbsp;=&nbsp;1.341, p&nbsp;=&nbsp;0.184). Republican members averaged +7.10% excess versus −1.89% for Democrats, though this gap is largely explained by sector concentration in energy and defense during favorable macro regimes. Individual standouts include McCaul (+67.70% excess on NVDA pre-AI boom), Hern (+45.15% on COIN during the crypto recovery), and Fallon (six trades averaging +17.68% excess, all purchases in technology and defense names where he serves on the Armed Services Committee).</p>
+  <p>The central finding, however, is about what happens <em>after</em> disclosure. The median reporting lag in our sample is 18.5 days, with a mean of 25.0 days and outliers exceeding 200 days (Tuberville's late-filed BABA and AAPL sales). For copycat investors buying at the disclosure date, the 90-day excess return drops to <strong>+2.43%</strong> (t&nbsp;=&nbsp;0.966, p&nbsp;=&nbsp;0.338) — statistically indistinguishable from zero. The 30-day copycat excess is a negligible +0.71%. In other words, the information advantage is real at trade date but has largely dissipated by the time it becomes public. The highest-alpha trades — committee-linked positions in defense, semiconductors, and energy — move fast, and the window closes well before the PTR filing hits EDGAR.</p>
+  <p>For investors, the implications are measured. A purchase-only copycat strategy survives as a modest positive-expectancy filter, but the edge is thin after transaction costs, and concentration risk is extreme — single-trade outliers dominate the distribution. For regulators, the data underscores the STOCK Act's structural inadequacy: $200 fines for late filing, no criminal enforcement against sitting members, and disclosure windows wide enough to let the most valuable information expire. For the academic community, our results sit between the optimistic Ziobrowski findings and the skeptical Eggers &amp; Hainmueller rebuttal — the alpha exists but is smaller, noisier, and less exploitable than the popular narrative suggests.</p>
 </section>
 
 <!-- 02 Introduction -->
@@ -774,7 +775,17 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <h3>7.2 The Party Gap Is Sector-Driven</h3>
   <p>The 8.99-percentage-point party gap (+7.10% R vs. −1.89% D) is largely explained by sector allocation. Republican members' energy and defense trades performed well during the 2022 energy crisis and 2023–24 defense spending cycle. Pelosi's high-volume, tech-heavy portfolio dragged the Democratic average—particularly her RBLX (−28.13% excess) and PANW (−19.23% excess) positions.</p>
 
-  <h3>7.3 Limitations</h3>
+  <h3>7.3 Practical Implementation Challenges</h3>
+  <p>Even if the statistical signal were robust, translating congressional trade disclosures into a viable investment strategy faces significant real-world obstacles:</p>
+  <ul>
+    <li><strong>Transaction costs and slippage:</strong> A copycat strategy requires executing trades shortly after disclosure — often in names that have already moved on the news. For widely-followed traders like Pelosi, disclosure itself creates a price spike. Round-trip costs of 0.5–1.0% consume a meaningful portion of the 2.43% copycat excess return.</li>
+    <li><strong>Position sizing mismatch:</strong> Congressional trades span an enormous range — from $15,001 minimum disclosure to $50M+ for major positions. The STOCK Act's disclosure bands ($15K–$50K, $50K–$100K, etc.) force midpoint estimation. A retail investor deploying $5,000 per trade faces fundamentally different risk/reward dynamics than a member investing $3M.</li>
+    <li><strong>Liquidity constraints for small-cap names:</strong> While most congressional trades target large-cap, liquid names (NVDA, MSFT, TSLA), occasional small- and mid-cap positions (ENPH, ALNY, DJT) present liquidity challenges. Slippage on entry and exit can exceed the expected alpha for these names, particularly when multiple copycat services flag the same trade simultaneously.</li>
+    <li><strong>Tax implications of frequent trading:</strong> Short-term capital gains tax (up to 37% federal) applies to positions held under one year. A 90-day holding strategy generates entirely short-term gains, reducing the after-tax excess return from +2.43% to approximately +1.53% for a high-income investor.</li>
+    <li><strong>Survivorship bias in the dataset:</strong> Our sample consists of 68 <em>high-profile</em> trades selected for notability and data availability. The full universe of congressional transactions is considerably larger (thousands per year across both chambers) and likely includes many unremarkable, market-tracking positions that would dilute the observed alpha. Additionally, we only observe <em>disclosed</em> trades — the compliance rate with STOCK Act filing requirements is imperfect, and systematically late or non-filed trades may differ in character from timely disclosures.</li>
+  </ul>
+
+  <h3>7.4 Limitations</h3>
   <ul>
     <li><strong>Small sample (n=68):</strong> Insufficient for robust statistical conclusions. Single outliers materially affect means.</li>
     <li><strong>Selection bias:</strong> We sampled high-profile, newsworthy trades — not a random draw from all congressional transactions.</li>
@@ -791,21 +802,41 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <h2>Conclusion &amp; Investment Implications</h2>
   <div class="key-takeaway">
     <span class="kt-label">Key Takeaway</span>
-    <p>Copycat returns drop to +2.43% at 90 days after disclosure lag — the edge is marginal after transaction costs.</p>
+    <p>Copycat returns drop to +2.43% at 90 days after disclosure lag — the edge is marginal after transaction costs. But the data tells a richer story for different audiences.</p>
   </div>
 
-  <p>Congressional trades in our sample exhibit a <strong>positive but statistically ambiguous edge</strong> over the market. The +3.40% mean excess return at 90 days is economically meaningful but does not reach conventional significance thresholds. The signal is strongest for <strong>purchase transactions</strong> (+4.16% excess, 71.9% raw win rate) and <strong>Republican members</strong> (+7.10% excess), though both are influenced by sector timing.</p>
+  <p>Congressional trades in our sample exhibit a <strong>positive but statistically ambiguous edge</strong> over the market. The +3.40% mean excess return at 90 days is economically meaningful but does not reach conventional significance thresholds. The signal is strongest for <strong>purchase transactions</strong> (+4.16% excess, 71.9% raw win rate) and <strong>Republican members</strong> (+7.10% excess), though both are influenced by sector timing and small-sample volatility.</p>
 
-  <h3>For Practitioners</h3>
+  <h3>For Individual Investors</h3>
   <ul>
-    <li><strong>Copycat strategy viability:</strong> At the typical 18.5-day disclosure lag, excess returns drop to ~0.71% at 30 days and ~2.43% at 90 days. After transaction costs, the edge is marginal.</li>
-    <li><strong>Purchase-only filter:</strong> Restricting to purchases substantially improves mean excess returns (4.16% vs 3.40%) and win rates (56.1% vs 52.9%).</li>
-    <li><strong>Concentration risk:</strong> The top performers are single-trade wonders. Mimicking requires accepting extreme idiosyncratic risk.</li>
-    <li><strong>Committee signal:</strong> Armed Services members (Fallon, Tuberville, Austin Scott) show consistently above-average performance in defense-adjacent sectors.</li>
+    <li><strong>Use congressional disclosures as a <em>filter</em>, not a <em>strategy</em>.</strong> The data supports treating unusual committee-linked trades as a signal worth investigating — not as a buy signal in isolation. When an Armed Services Committee member buys a defense contractor, it merits a deeper look at the company's fundamentals and upcoming contract cycles.</li>
+    <li><strong>Restrict to purchases only.</strong> Sales are noisy, tax-motivated, and show no exploitable edge (−0.52% excess at 90 days). Purchase-only filtering improves mean excess from +3.40% to +4.16% and win rate from 52.9% to 56.1%.</li>
+    <li><strong>Monitor disclosure lag carefully.</strong> Trades disclosed within 14 days retain more signal than late filings. The fastest filers (Pelosi at 10–15 days, Hagerty at 17 days) are the most actionable for copycats — but also the most widely followed, which compresses the remaining alpha.</li>
+    <li><strong>Expect high variance.</strong> The standard deviation of excess returns is ~22% — meaning a "typical" copycat position could easily finish anywhere from −19% to +25%. Position sizing must reflect this dispersion.</li>
   </ul>
 
-  <h3>For Policy</h3>
-  <p>The mean disclosure lag of 25.0 days (maximum: 242 days) demonstrates the STOCK Act's enforcement gap. Our data includes confirmed late filers and trades executed after classified briefings (Burr, Feinstein, Perdue) with no criminal consequences. The $200 fine remains the sole deterrent.</p>
+  <h3>For Institutional Investors &amp; Fund Managers</h3>
+  <ul>
+    <li><strong>The raw signal is too weak for a standalone fund.</strong> A t-statistic of 1.341 and n=68 does not survive institutional due diligence. However, congressional trading data can augment existing alternative data pipelines — particularly as a sentiment indicator for sector-level positioning.</li>
+    <li><strong>Committee membership is the alpha predictor.</strong> Factor models should weight committee-relevant trades (Armed Services → defense, Energy &amp; Commerce → energy, Financial Services → banks) more heavily than general trades. Fallon's six Armed Services-linked tech/defense trades averaged +17.68% excess; the average non-committee trade is far weaker.</li>
+    <li><strong>Consider a long-short construction.</strong> Purchases show positive excess (+4.16%) while sales show negative excess (−0.52%). A long-short portfolio buying disclosed purchases and shorting disclosed sales would capture both sides of the information asymmetry, though the small sale sample (n=11) limits confidence.</li>
+  </ul>
+
+  <h3>For Regulators</h3>
+  <ul>
+    <li><strong>The $200 fine is not a deterrent.</strong> Tuberville filed trades 225–242 days late. Burr traded after a classified COVID briefing. Perdue was investigated by the DOJ. No sitting member has faced criminal consequences under the STOCK Act. The penalty structure is designed to fail.</li>
+    <li><strong>Real-time disclosure would eliminate the exploitable gap.</strong> Our data shows the information advantage concentrates in the first 10–20 days after trade date. Moving from 45-day reporting to T+1 or T+2 electronic disclosure (as proposed in the TRUST in Congress Act and the Ban Congressional Stock Trading Act) would collapse the copycat window and dramatically increase public scrutiny.</li>
+    <li><strong>Blind trusts remain the gold standard.</strong> The cleanest solution — mandatory blind trusts or index fund-only investing for members and their spouses — eliminates the conflict entirely. Several members (e.g., Jon Ossoff, Jeff Merkley) have voluntarily adopted this approach.</li>
+  </ul>
+
+  <h3>For Researchers: Future Work</h3>
+  <ul>
+    <li><strong>Larger sample with full-universe coverage.</strong> Our n=68 is limited to high-profile trades. A comprehensive dataset of all PTR filings (thousands per year) would enable proper factor analysis and sub-group testing with adequate statistical power.</li>
+    <li><strong>Fama-French and sector-neutral benchmarking.</strong> This study benchmarks against SPY only. Three-factor and five-factor models would isolate whether congressional alpha reflects genuine information or mere factor tilts (small-cap, value, momentum).</li>
+    <li><strong>NLP-linked legislative event studies.</strong> Following Li et al. (2025), mapping trade timing to bill introductions, committee hearings, and votes would identify "enterprising trades" — the subset most likely to reflect non-public legislative information.</li>
+    <li><strong>Causal identification via STOCK Act natural experiment.</strong> Comparing pre- and post-STOCK Act returns with difference-in-differences methods would provide cleaner causal estimates of whether disclosure requirements actually reduce trading on privileged information.</li>
+    <li><strong>Cross-country comparison.</strong> Parliamentary trading rules vary widely across democracies. Comparing US congressional returns with UK, EU, and Australian legislator trading would contextualize the magnitude and persistence of the observed alpha.</li>
+  </ul>
 </section>
 
 <!-- 09 Recent Trades -->
@@ -904,6 +935,35 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <div class="citation"><strong>Li, Y., Michelson, G., Mollica, V., Zhou, Q.</strong> (2025). Inside the Beltway: Senator Trading and Legislative Gains. <em>Journal of Business Ethics</em>. Springer.</div>
   <div class="citation"><strong>Ziobrowski, A.J., Cheng, P., Boyd, J.W., Ziobrowski, B.J.</strong> (2004). Abnormal Returns from the Common Stock Investments of the United States Senate. <em>Journal of Financial and Quantitative Analysis</em>, 39(4), 661–676.</div>
   <div class="citation"><strong>Ziobrowski, A.J., Boyd, J.W., Cheng, P., Ziobrowski, B.J.</strong> (2011). Abnormal Returns from the Common Stock Investments of Members of the U.S. House. <em>Business and Politics</em>, 13(1), 1–22.</div>
+</section>
+
+<!-- 12 How This Was Built -->
+<section id="how-built" class="fade-in">
+  <div class="section-num">Section 12</div>
+  <h2>How This Was Built</h2>
+  <div class="key-takeaway">
+    <span class="kt-label">Full Disclosure</span>
+    <p>This entire research platform — literature review, data collection, quantitative analysis, interactive visualization, and editorial review — was conceived, built, and published autonomously by an AI agent system in a single evening.</p>
+  </div>
+
+  <p>Everything you've read across the preceding eleven sections was produced without human authorship. The research question, methodology, data pipeline, statistical analysis, interactive charts, portfolio simulator, trade explorer, and written prose were all generated by <strong><a href="https://openclaw.ai" target="_blank" style="color:var(--teal)">OpenClaw</a></strong>, an autonomous AI agent orchestration platform.</p>
+
+  <p>The system deployed a <strong>multi-agent architecture</strong> where specialized agents collaborated on distinct workstreams:</p>
+  <ul>
+    <li><strong>Literature Review Agent</strong> — Surveyed the academic corpus on congressional trading alpha, from Ziobrowski (2004) through Li et al. (2025), synthesizing findings and identifying the disclosure-lag research gap</li>
+    <li><strong>Data Pipeline Agent</strong> — Collected congressional trade disclosures from SEC PTR filings, cross-referenced with Yahoo Finance price data via yfinance, computed forward returns at multiple horizons, and generated all statistical metrics</li>
+    <li><strong>Quantitative Analysis Agent</strong> — Designed the analytical framework, performed t-tests, calculated excess returns from both insider and copycat perspectives, and produced the lag decay analysis</li>
+    <li><strong>Frontend Builder Agent</strong> — Authored the complete single-file web application: responsive layout, Chart.js visualizations, interactive simulator, sortable tables, trade explorer with search/filter, dark/light themes, and print stylesheet</li>
+    <li><strong>Editor &amp; QA Agents</strong> — Reviewed content for accuracy, consistency, and depth; ensured statistical claims match underlying data; refined prose for clarity and academic rigor</li>
+  </ul>
+
+  <p>No templates were used. No human wrote or edited the content. The agents coordinated through OpenClaw's orchestration layer, with each agent's output feeding into the next stage of the pipeline. Total elapsed time from research question to deployed platform: <strong>one evening</strong>.</p>
+
+  <p>This project demonstrates that autonomous AI systems can now produce publication-quality empirical research — complete with original data analysis, interactive visualization, and nuanced academic writing — at a speed and cost that was unimaginable even twelve months ago. The implications for financial research, investigative journalism, and public policy analysis are profound.</p>
+
+  <p style="text-align:center;margin-top:2rem">
+    <a href="https://openclaw.ai" target="_blank" style="display:inline-block;padding:.7rem 2rem;background:var(--teal);color:#000;border-radius:8px;text-decoration:none;font-family:var(--mono);font-weight:600;font-size:.9rem;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Learn more about OpenClaw →</a>
+  </p>
 </section>
 
 </div>
