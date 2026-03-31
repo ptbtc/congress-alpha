@@ -1,0 +1,11 @@
+sector,n_trades,n_traders,pct_purchases,mean_return_90d_pct,median_return_90d_pct,mean_excess_90d_pct,win_rate_90d_pct,t_statistic,p_value,significant_5pct,total_est_value
+Consumer Discretionary,8,8,75.0,12.37,9.92,10.21,75.0,1.187,0.2741,False,1305000
+Financials,5,5,100.0,17.65,14.18,8.84,100.0,0.966,0.389,False,347500
+Commodities,1,1,100.0,-4.07,-4.07,8.1,0.0,0.0,1.0,False,175000
+Industrials,4,3,75.0,13.48,11.54,6.52,50.0,0.512,0.6441,False,130000
+Energy,5,5,100.0,-0.41,1.52,4.08,80.0,0.531,0.6234,False,205000
+Technology,32,13,84.4,9.1,8.73,2.65,59.4,0.657,0.5157,False,20320000
+Healthcare,8,7,87.5,9.64,8.61,2.02,100.0,0.353,0.7345,False,1105000
+Broad Market,2,2,0.0,-4.74,-4.74,0.0,0.0,,,False,825000
+Materials,1,1,100.0,-24.45,-24.45,-11.26,0.0,0.0,1.0,False,175000
+Communication Services,2,2,100.0,-15.58,-15.58,-19.43,50.0,-1.193,0.444,False,407500

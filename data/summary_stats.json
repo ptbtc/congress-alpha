@@ -1,0 +1,89 @@
+{
+  "methodology": {
+    "dataset": "Curated sample of ~80 high-profile congressional trades (2020-2025)",
+    "source": "SEC EDGAR PTR filings, news coverage, Capitol Trades references",
+    "note": "NOT the full universe. S3 data sources (house/senate-stock-watcher) returned 403.",
+    "benchmark": "SPY (S&P 500 ETF)",
+    "risk_free_rate": 0.04,
+    "generated": "2026-03-31T22:27:40.505281"
+  },
+  "headline_numbers": {
+    "total_trades": 68,
+    "total_traders": 36,
+    "date_range": "2020-01-23 to 2024-11-22",
+    "total_est_value": "$24,995,000"
+  },
+  "all_trades_90d": {
+    "mean_return_pct": 7.92,
+    "mean_excess_return_pct": 3.4,
+    "median_excess_return_pct": 0.74,
+    "win_rate_pct": 66.2,
+    "excess_win_rate_pct": 52.9,
+    "t_statistic": 1.341,
+    "p_value": 0.1844,
+    "significant": false
+  },
+  "purchases_90d": {
+    "n_trades": 57,
+    "mean_excess_return_pct": 4.16,
+    "win_rate_pct": 71.9
+  },
+  "portfolio_simulation": {
+    "cumulative_return_pct": 17689.6,
+    "cagr_pct": 192.2,
+    "max_drawdown_pct": -162.9,
+    "sharpe_ratio": 0.71
+  },
+  "party_comparison": {
+    "democrat_mean_excess_90d": -1.89,
+    "republican_mean_excess_90d": 7.1,
+    "democrat_n_trades": 28,
+    "republican_n_trades": 40,
+    "t_statistic": -1.772,
+    "p_value": 0.0809,
+    "significant_difference": false
+  },
+  "top_traders": [
+    {
+      "trader": "Michael McCaul",
+      "party": "R",
+      "n_trades": 1,
+      "mean_excess_90d": 67.7,
+      "win_rate": 100.0
+    },
+    {
+      "trader": "Kevin Hern",
+      "party": "R",
+      "n_trades": 1,
+      "mean_excess_90d": 45.15,
+      "win_rate": 100.0
+    },
+    {
+      "trader": "Dianne Feinstein",
+      "party": "D",
+      "n_trades": 1,
+      "mean_excess_90d": 29.56,
+      "win_rate": 100.0
+    },
+    {
+      "trader": "Virginia Foxx",
+      "party": "R",
+      "n_trades": 1,
+      "mean_excess_90d": 20.26,
+      "win_rate": 100.0
+    },
+    {
+      "trader": "Josh Gottheimer",
+      "party": "D",
+      "n_trades": 2,
+      "mean_excess_90d": 18.74,
+      "win_rate": 100.0
+    }
+  ],
+  "disclosure_lag": {
+    "mean_days": 25.0,
+    "median_days": 18.5,
+    "max_days": 242,
+    "min_days": 10
+  }
+}
