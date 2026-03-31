@@ -40,9 +40,8 @@
 html{scroll-behavior:smooth;font-size:16px}
 body{
   font-family:var(--body);color:var(--text);background:var(--bg);
-  line-height:1.75;-webkit-font-smoothing:antialiased;
+  line-height:1.72;-webkit-font-smoothing:antialiased;
   transition:background .3s,color .3s;
-  font-feature-settings:'tnum' 1;
 }
 
 /* Sidebar */
@@ -118,98 +117,79 @@ body{
   letter-spacing:-.03em;
 }
 .hero .subtitle{
-  font-family:var(--body);font-size:1.12rem;color:var(--text);opacity:.85;
-  max-width:620px;margin:0 auto 1rem;font-style:italic;
-  text-shadow:0 1px 8px rgba(0,0,0,.3);
+  font-family:var(--body);font-size:1.08rem;color:var(--text-dim);
+  max-width:580px;margin:0 auto 1rem;font-style:italic;
 }
 .hero .meta{font-family:var(--mono);font-size:.78rem;color:var(--teal);letter-spacing:.08em;text-transform:uppercase}
 
 .stat-cards{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;
-  max-width:860px;margin:2.5rem auto 0;
+  display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;
+  max-width:800px;margin:2.5rem auto 0;
 }
 .stat-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:1.8rem 1.3rem;text-align:center;transition:border-color .3s,transform .2s,box-shadow .3s;
-  position:relative;overflow:hidden;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:1.3rem;text-align:center;transition:border-color .3s,transform .2s;
 }
-.stat-card::before{
-  content:'';position:absolute;inset:-1px;border-radius:13px;
-  background:linear-gradient(135deg,var(--teal),var(--purple),var(--teal));
-  background-size:300% 300%;animation:stat-glow 4s ease infinite;
-  opacity:0;transition:opacity .3s;z-index:0;
-}
-.stat-card::after{
-  content:'';position:absolute;inset:1px;border-radius:11px;
-  background:var(--bg2);z-index:1;
-}
-.stat-card>*{position:relative;z-index:2}
-.stat-card:hover::before{opacity:1}
-.stat-card:hover{border-color:transparent;transform:translateY(-3px);box-shadow:0 8px 32px rgba(20,184,166,.15)}
-@keyframes stat-glow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.stat-card:hover{border-color:var(--teal);transform:translateY(-2px)}
 .stat-card .value{
-  font-family:var(--mono);font-size:2rem;font-weight:700;
+  font-family:var(--mono);font-size:1.7rem;font-weight:500;
   color:var(--teal);line-height:1.2;
 }
-.stat-card .label{font-size:.78rem;color:var(--text-dim);margin-top:.5rem;line-height:1.4}
+.stat-card .label{font-size:.75rem;color:var(--text-dim);margin-top:.4rem;line-height:1.4}
 
 /* Sections */
-section{padding:5rem 0 4rem;border-bottom:1px solid var(--border)}
+section{padding:3rem 0 2rem;border-bottom:1px solid var(--border)}
 section:last-of-type{border-bottom:none}
 .section-num{
   font-family:var(--mono);font-size:.72rem;color:var(--teal);
   letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;
 }
 h2{
-  font-family:var(--heading);font-size:2rem;font-weight:700;
-  color:var(--text-bright);margin-bottom:1.5rem;letter-spacing:-.02em;
-  line-height:1.3;
+  font-family:var(--heading);font-size:1.8rem;font-weight:600;
+  color:var(--text-bright);margin-bottom:1.2rem;letter-spacing:-.02em;
 }
 h3{
-  font-family:var(--heading);font-size:1.35rem;font-weight:600;
-  color:var(--text-bright);margin:2.5rem 0 1rem;
-  line-height:1.4;
+  font-family:var(--heading);font-size:1.25rem;font-weight:600;
+  color:var(--text-bright);margin:2rem 0 .8rem;
 }
 h4{
-  font-family:var(--heading);font-size:1.1rem;font-weight:600;
-  color:var(--text-bright);margin:1.8rem 0 .8rem;
-  line-height:1.4;opacity:.9;
+  font-family:var(--heading);font-size:1.05rem;font-weight:600;
+  color:var(--text-bright);margin:1.5rem 0 .6rem;
 }
-p{margin-bottom:1.2rem}
+p{margin-bottom:1rem}
 strong{color:var(--text-bright)}
 .highlight{color:var(--teal);font-weight:600}
 .mono{font-family:var(--mono)}
 
 /* Charts */
 .chart-container{
-  background:var(--bg2);border:1px solid var(--border-light);border-radius:12px;
-  padding:2rem;margin:2rem 0;position:relative;
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
+  padding:1.5rem;margin:1.5rem 0;position:relative;
 }
 .chart-container .chart-title{
-  font-family:var(--heading);font-size:1.15rem;font-weight:700;
-  color:var(--teal);margin-bottom:.4rem;letter-spacing:-.01em;
+  font-family:var(--heading);font-size:1rem;font-weight:600;
+  color:var(--text-bright);margin-bottom:.3rem;
 }
 .chart-container .chart-subtitle{
-  font-family:var(--body);font-size:.82rem;color:var(--text-dim);margin-bottom:1.2rem;
+  font-family:var(--body);font-size:.78rem;color:var(--text-dim);margin-bottom:1rem;
 }
 .chart-container canvas{max-height:380px}
 
 /* Tables */
-.table-wrap{overflow-x:auto;margin:2rem 0;border-radius:12px;border:1px solid var(--border-light);box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.table-wrap{overflow-x:auto;margin:1.5rem 0;border-radius:10px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:.82rem}
 thead{background:var(--bg3)}
 th{
   font-family:var(--mono);font-weight:500;text-transform:uppercase;
   font-size:.7rem;letter-spacing:.08em;color:var(--text-dim);
-  padding:1rem .9rem;text-align:left;cursor:pointer;
+  padding:.8rem .7rem;text-align:left;cursor:pointer;
   user-select:none;white-space:nowrap;border-bottom:1px solid var(--border);
   transition:color .2s;
 }
 th:hover{color:var(--teal)}
 th .sort-arrow{font-size:.6rem;margin-left:.3rem;opacity:.5}
 td{
-  padding:.85rem .9rem;border-bottom:1px solid var(--border);
+  padding:.7rem;border-bottom:1px solid var(--border);
   font-family:var(--body);font-size:.82rem;vertical-align:middle;
 }
 tr:last-child td{border-bottom:none}
@@ -282,24 +262,10 @@ td.num{font-family:var(--mono);text-align:right}
 .sim-chart-container{margin-top:1.5rem}
 .sim-chart-container canvas{max-height:300px}
 
-/* Key Takeaway Callout */
-.key-takeaway{
-  border-left:4px solid var(--teal);background:rgba(20,184,166,.06);
-  border-radius:0 10px 10px 0;padding:1.2rem 1.5rem;margin:1.5rem 0 2rem;
-  font-size:.95rem;
-}
-.key-takeaway .kt-label{
-  font-family:var(--mono);font-size:.68rem;text-transform:uppercase;
-  letter-spacing:.12em;color:var(--teal);margin-bottom:.4rem;display:block;
-}
-.key-takeaway p{
-  margin:0;font-weight:600;color:var(--text-bright);line-height:1.6;
-}
-
 /* Blockquotes */
 blockquote{
-  border-left:4px solid var(--teal);padding:1rem 1.5rem;margin:1.5rem 0;
-  background:var(--teal-dim);border-radius:0 10px 10px 0;
+  border-left:3px solid var(--teal);padding:.8rem 1.2rem;margin:1.2rem 0;
+  background:var(--teal-dim);border-radius:0 8px 8px 0;
   font-style:italic;color:var(--text-dim);
 }
 .citation{
@@ -369,12 +335,10 @@ li::marker{color:var(--teal)}
 
 /* Footer */
 footer{
-  text-align:center;padding:4rem 2rem 3rem;border-top:1px solid var(--border);
+  text-align:center;padding:3rem 2rem;border-top:1px solid var(--border);
   font-size:.78rem;color:var(--text-dim);font-family:var(--mono);
-  line-height:2;
 }
 footer a{color:var(--teal);text-decoration:none}
-footer .footer-meta{display:block;margin-bottom:.3rem}
 
 /* Print */
 @media print{
@@ -474,10 +438,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="executive-summary" class="fade-in">
   <div class="section-num">Section 01</div>
   <h2>Executive Summary</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>Congressional trades generate +3.4% mean excess return at 90 days, but the signal is not statistically significant at the 5% level.</p>
-  </div>
   <p>Our analysis of <strong class="highlight">68 high-profile congressional trades</strong> from 2020–2024 reveals a measurable but statistically ambiguous information advantage. At the 90-day horizon from trade date, congressional trades delivered a <strong>mean excess return of +3.40%</strong> over the SPY benchmark (t&nbsp;=&nbsp;1.341, p&nbsp;=&nbsp;0.184)—suggestive but not significant at the 5% level.</p>
   <p>The signal is <strong>concentrated in purchases</strong>. The 57 purchase transactions produced a <strong>+4.16% mean excess return</strong> with a <strong>71.9% raw win rate</strong>, while the 11 sales showed a negative −0.52% excess return with only a 36.4% win rate—an asymmetry suggesting members are better at identifying upside opportunities than timing exits.</p>
   <p>The <strong>party divergence is striking</strong>: Republican members averaged +7.10% excess return at 90 days versus −1.89% for Democrats (t&nbsp;=&nbsp;−1.772, p&nbsp;=&nbsp;0.081). However, this gap is largely driven by sector concentration—Republicans overweighted energy and defense during favorable macro regimes, while several high-profile Democratic trades (Pelosi's RBLX, PANW) suffered significant drawdowns.</p>
@@ -488,10 +448,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="introduction" class="fade-in">
   <div class="section-num">Section 02</div>
   <h2>Introduction &amp; Research Question</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>The core question: does congressional trading alpha survive the mandatory 45-day disclosure delay imposed by the STOCK Act?</p>
-  </div>
   <p>Members of the United States Congress receive classified briefings, shape legislation affecting specific industries, and meet regularly with corporate executives, regulators, and lobbyists. Whether this informational advantage translates into trading profits—and whether existing regulation adequately prevents such exploitation—remains contested in both the academic literature and public discourse.</p>
   <p>The question sits at the intersection of finance, political science, and regulatory design. Since Ziobrowski et al.'s seminal 2004 finding that Senate portfolios beat the market by <strong>~85 basis points per month</strong> (~12% annualized), a growing body of research has debated the existence, magnitude, and persistence of congressional trading alpha.</p>
   <p>This study addresses a specific, practically relevant question: <strong>Does the alpha survive the mandatory disclosure delay?</strong> The STOCK Act of 2012 requires members to disclose trades within 45 days. By the time a retail investor can observe and replicate a congressional trade, the information advantage may have dissipated. We analyze this decay curve using 68 real trades with verified price data to quantify how much alpha remains at each lag interval.</p>
@@ -502,10 +458,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="literature" class="fade-in">
   <div class="section-num">Section 03</div>
   <h2>Literature Review</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>Pre-STOCK Act alpha was 6–12% annualized; post-STOCK Act studies show reduced but persistent signal.</p>
-  </div>
 
   <h3>3.1 The Foundational Studies: Ziobrowski et al. (2004, 2011)</h3>
   <p>The field began with Ziobrowski, Cheng, Boyd, and Ziobrowski's 2004 paper in the <em>Journal of Financial and Quantitative Analysis</em>. Using congressional financial disclosure filings from 1993–1998, the authors reconstructed senator portfolios and applied a calendar-time portfolio approach using the CAPM and Fama-French three-factor model. Senate portfolios beat the market by approximately <strong>85 basis points per month</strong> — roughly 12% annualized excess return, exceeding even corporate insiders.</p>
@@ -528,10 +480,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="methodology" class="fade-in">
   <div class="section-num">Section 04</div>
   <h2>Data &amp; Methodology</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>68 high-profile trades from 36 members, benchmarked against SPY — measured from both trade date (insider) and disclosure date (copycat).</p>
-  </div>
 
   <div class="methodology-callout">
     <h4>Data Methodology</h4>
@@ -568,10 +516,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="findings" class="fade-in">
   <div class="section-num">Section 05</div>
   <h2>Findings</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>Purchase-only trades show +4.16% excess return with 71.9% raw win rate — the signal is concentrated in buys, not sells.</p>
-  </div>
 
   <h3>5.1 Lag Decay: Information Advantage Erodes with Time</h3>
   <p>The central finding: congressional insiders capture meaningful excess returns from trade date, but the advantage available to copycat investors is substantially diminished. At disclosure (T+0 for copycats), the excess return is +2.12%. By T+90 for copycats, it recovers to +2.43%—but with higher variance and weaker statistical significance.</p>
@@ -763,10 +707,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="discussion" class="fade-in">
   <div class="section-num">Section 07</div>
   <h2>Discussion &amp; Limitations</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>The alpha is real but concentrated in a handful of traders and committee-linked trades.</p>
-  </div>
 
   <h3>7.1 The Signal Is Real, But Not Statistically Significant</h3>
   <p>With a t-statistic of 1.341 (p&nbsp;=&nbsp;0.184) for the full sample at 90 days, we cannot reject the null hypothesis that congressional trades perform no better than the market. However, the <strong>consistency of positive excess returns</strong> across all time horizons and the stronger signal in purchases (t&nbsp;=&nbsp;1.606, p&nbsp;=&nbsp;0.114) suggest genuine informational content—the sample is simply too small to confirm at conventional significance levels.</p>
@@ -789,10 +729,6 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <section id="conclusion" class="fade-in">
   <div class="section-num">Section 08</div>
   <h2>Conclusion &amp; Investment Implications</h2>
-  <div class="key-takeaway">
-    <span class="kt-label">Key Takeaway</span>
-    <p>Copycat returns drop to +2.43% at 90 days after disclosure lag — the edge is marginal after transaction costs.</p>
-  </div>
 
   <p>Congressional trades in our sample exhibit a <strong>positive but statistically ambiguous edge</strong> over the market. The +3.40% mean excess return at 90 days is economically meaningful but does not reach conventional significance thresholds. The signal is strongest for <strong>purchase transactions</strong> (+4.16% excess, 71.9% raw win rate) and <strong>Republican members</strong> (+7.10% excess), though both are influenced by sector timing.</p>
 
@@ -909,10 +845,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 </div>
 
 <footer>
-  <span class="footer-meta">Last updated: March 2026</span>
-  <span class="footer-meta">Methodology: 68 trades · 36 traders · 2020–2025 · Benchmark: SPY</span>
-  Data: SEC PTR Filings, Yahoo Finance (yfinance), Capitol Trades<br>
-  Built with <a href="https://openclaw.com" target="_blank">OpenClaw</a>
+  Built with <a href="https://openclaw.com" target="_blank">OpenClaw</a> &nbsp;·&nbsp; Data: SEC PTR Filings, Yahoo Finance (yfinance), Capitol Trades &nbsp;·&nbsp; Benchmark: SPY
 </footer>
 
 </div>
@@ -1116,7 +1049,7 @@ function showToast(msg){
    ═══════════════════════════════ */
 
 function isDark(){return document.documentElement.dataset.theme==='dark'}
-function gridColor(){return isDark()?'rgba(255,255,255,.09)':'rgba(0,0,0,.08)'}
+function gridColor(){return isDark()?'rgba(255,255,255,.06)':'rgba(0,0,0,.08)'}
 function tickColor(){return isDark()?'#64748b':'#94a3b8'}
 function fontColor(){return isDark()?'#cbd5e1':'#475569'}
 
