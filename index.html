@@ -443,7 +443,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <div class="stat-cards">
     <div class="stat-card fade-in">
       <div class="value" style="color:var(--teal)">3,962</div>
-      <div class="label">Trades Analyzed<br>Mar 2024 – Sep 2025</div>
+      <div class="label">Trades Analyzed<br>Cutoff: 31 Mar 2026</div>
     </div>
     <div class="stat-card fade-in">
       <div class="value negative-val">−0.74%</div>
@@ -474,7 +474,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
     <p>Copying congressional trades at disclosure generates negative alpha. Mean 30d excess return: −0.74% (p&nbsp;&lt;&nbsp;0.001). The underperformance worsens with horizon.</p>
   </div>
 
-  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank" style="color:var(--teal)">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, covering disclosures from March 2024 through September 2025. The cutoff reflects the fact that more recent disclosures lack sufficient forward price history (30–180 days) for return calculation. All prices were fetched from Yahoo Finance.</p>
+  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank" style="color:var(--teal)">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, with a data collection cutoff of March 31, 2026. Trades disclosed after September 2025 were excluded from the return analysis because they lack sufficient forward price history (30–180 days) for meaningful return calculation. All prices were fetched from Yahoo Finance.</p>
 
   <p><strong>The finding:</strong> copying congressional trades at disclosure does <em>not</em> generate alpha. The mean 30-day excess return is <strong class="highlight" style="color:var(--red)">−0.74%</strong> (t = −5.18, p &lt; 0.001), with only 43.5% of trades beating SPY. The underperformance <em>worsens</em> with horizon: −1.37% at 60 days, −1.84% at 90 days. Every horizon is statistically significant at the 1% level.</p>
 
