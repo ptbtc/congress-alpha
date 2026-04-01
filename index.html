@@ -412,12 +412,12 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
     <a href="#hero"><span class="num">00</span>Overview</a>
     <a href="#executive-summary"><span class="num">01</span>Executive Summary</a>
     <a href="#methodology"><span class="num">02</span>Data &amp; Methodology</a>
-    <a href="#literature"><span class="num">03</span>Key Literature</a>
-    <a href="#findings"><span class="num">04</span>Findings</a>
-    <a href="#simulator"><span class="num">05</span>Portfolio Simulator</a>
-    <a href="#trade-explorer"><span class="num">06</span>Trade Explorer</a>
-    <a href="#discussion"><span class="num">07</span>Discussion</a>
-    <a href="#conclusion"><span class="num">08</span>Conclusion</a>
+    <a href="#findings"><span class="num">03</span>Findings</a>
+    <a href="#simulator"><span class="num">04</span>Portfolio Simulator</a>
+    <a href="#trade-explorer"><span class="num">05</span>Trade Explorer</a>
+    <a href="#discussion"><span class="num">06</span>Discussion</a>
+    <a href="#conclusion"><span class="num">07</span>Conclusion</a>
+    <a href="#literature"><span class="num">08</span>Key Literature</a>
     <a href="#how-built"><span class="num">09</span>How This Was Built</a>
     <a href="#references"><span class="num">10</span>References</a>
   </nav>
@@ -474,7 +474,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
     <p>Copying congressional trades at disclosure generates negative alpha. Mean 30d excess return: −0.74% (p&nbsp;&lt;&nbsp;0.001). The underperformance worsens with horizon.</p>
   </div>
 
-  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank" style="color:var(--teal)">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, covering disclosures from March 2024 through September 2025. All prices were fetched from Yahoo Finance.</p>
+  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank" style="color:var(--teal)">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, covering disclosures from March 2024 through September 2025. The cutoff reflects the fact that more recent disclosures lack sufficient forward price history (30–180 days) for return calculation. All prices were fetched from Yahoo Finance.</p>
 
   <p><strong>The finding:</strong> copying congressional trades at disclosure does <em>not</em> generate alpha. The mean 30-day excess return is <strong class="highlight" style="color:var(--red)">−0.74%</strong> (t = −5.18, p &lt; 0.001), with only 43.5% of trades beating SPY. The underperformance <em>worsens</em> with horizon: −1.37% at 60 days, −1.84% at 90 days. Every horizon is statistically significant at the 1% level.</p>
 
@@ -508,20 +508,8 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 </section>
 
 <!-- 03 Key Literature -->
-<section id="literature" class="fade-in">
-  <div class="section-num">Section 03</div>
-  <h2>Key Literature</h2>
-
-  <p><strong>The case for alpha:</strong> Ziobrowski et al. (2004) found Senate portfolios beat the market by ~85 bps/month (~12% annualized) using 1993–1998 data. The 2011 House extension showed ~6% annualized. Critically, both studies used <em>trade dates</em>, not disclosure dates — the documented alpha was never available to outside investors. Hall, Karadas &amp; Schlosky (2017) showed new members earned ~13.6% annualized alpha <em>after</em> taking office but none before, supporting the information-advantage hypothesis.</p>
-
-  <p><strong>The case against:</strong> Eggers &amp; Hainmueller (2013) found <em>no</em> significant abnormal returns in 2004–2008 data with more rigorous methods, attributing earlier findings to small samples and methodological choices. Karadas (2019) found returns disappeared post-STOCK Act, suggesting the transparency requirement had a genuine deterrent effect.</p>
-
-  <p><strong>The nuance:</strong> Li, Michelson, Mollica &amp; Zhou (2025) used NLP to identify "enterprising trades" — those executed 1–30 days before legislative events. These <em>specific</em> trades earned significantly higher returns, suggesting information advantage exists but is concentrated in committee-linked legislative timing, not broad copycat strategies. Our 3,962-trade dataset confirms this: the aggregate is negative, but a few committee-connected individuals show persistent alpha.</p>
-</section>
-
-<!-- 04 Findings -->
 <section id="findings" class="fade-in">
-  <div class="section-num">Section 04</div>
+  <div class="section-num">Section 03</div>
   <h2>Findings</h2>
   <div class="key-takeaway negative">
     <span class="kt-label">Key Finding</span>
@@ -657,7 +645,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 
 <!-- 05 Portfolio Simulator -->
 <section id="simulator" class="fade-in">
-  <div class="section-num">Section 05</div>
+  <div class="section-num">Section 04</div>
   <h2>Interactive Portfolio Simulator</h2>
   <p>Model expected copycat excess returns by horizon and party, based on actual data from our 3,962-trade dataset.</p>
 
@@ -717,7 +705,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 
 <!-- 06 Trade Explorer -->
 <section id="trade-explorer" class="fade-in">
-  <div class="section-num">Section 06</div>
+  <div class="section-num">Section 05</div>
   <h2>Trade Explorer</h2>
   <p>Browse all 46 politicians with their performance across horizons. Filter by party, chamber, or minimum trade count. Click column headers to sort.</p>
 
@@ -766,7 +754,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 
 <!-- 07 Discussion -->
 <section id="discussion" class="fade-in">
-  <div class="section-num">Section 07</div>
+  <div class="section-num">Section 06</div>
   <h2>Discussion</h2>
 
   <p><strong>Why negative alpha?</strong> The most likely explanation is adverse selection: by the time a trade is disclosed (mean lag: ~25 days), the information advantage has fully dissipated. Worse, disclosure itself creates a crowded trade — platforms like Quiver Quantitative, Capitol Trades, and Unusual Whales push alerts to millions of retail investors. The resulting buying pressure at disclosure inflates entry prices for copycats, creating a systematic disadvantage. The worsening performance at longer horizons (−0.74% → −1.84% at 90d) suggests mean reversion after the initial disclosure spike.</p>
@@ -778,7 +766,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 
 <!-- 08 Conclusion -->
 <section id="conclusion" class="fade-in">
-  <div class="section-num">Section 08</div>
+  <div class="section-num">Section 07</div>
   <h2>Conclusion</h2>
   <div class="key-takeaway negative">
     <span class="kt-label">Bottom Line</span>
@@ -792,30 +780,42 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <p><strong>For researchers:</strong> future work should test whether a <em>filtered</em> strategy (e.g., Senate-only, energy-committee-only, first-30-days-after-legislation) can isolate positive alpha within the broader negative signal. Our data hints at this: Senate trades show +1.88% excess at 30d (n=203, p=0.023), and energy trades beat XLE. The alpha may exist, but it's not where the retail crowd is looking.</p>
 </section>
 
-<!-- 09 How This Was Built -->
+<!-- 09 Key Literature -->
+<section id="literature" class="fade-in">
+  <div class="section-num">Section 08</div>
+  <h2>Key Literature</h2>
+
+  <p><strong>The case for alpha:</strong> Ziobrowski et al. (2004) found Senate portfolios beat the market by ~85 bps/month (~12% annualized) using 1993–1998 data. The 2011 House extension showed ~6% annualized. Critically, both studies used <em>trade dates</em>, not disclosure dates — the documented alpha was never available to outside investors. Hall, Karadas &amp; Schlosky (2017) showed new members earned ~13.6% annualized alpha <em>after</em> taking office but none before, supporting the information-advantage hypothesis.</p>
+
+  <p><strong>The case against:</strong> Eggers &amp; Hainmueller (2013) found <em>no</em> significant abnormal returns in 2004–2008 data with more rigorous methods, attributing earlier findings to small samples and methodological choices. Karadas (2019) found returns disappeared post-STOCK Act, suggesting the transparency requirement had a genuine deterrent effect.</p>
+
+  <p><strong>The nuance:</strong> Li, Michelson, Mollica &amp; Zhou (2025) used NLP to identify "enterprising trades" — those executed 1–30 days before legislative events. These <em>specific</em> trades earned significantly higher returns, suggesting information advantage exists but is concentrated in committee-linked legislative timing, not broad copycat strategies. Our 3,962-trade dataset confirms this: the aggregate is negative, but a few committee-connected individuals show persistent alpha.</p>
+</section>
+
+<!-- 10 How This Was Built -->
 <section id="how-built" class="fade-in">
   <div class="section-num">Section 09</div>
   <h2>How This Was Built</h2>
   <div class="key-takeaway">
     <span class="kt-label">Full Disclosure</span>
-    <p>This entire research platform — data collection, quantitative analysis, interactive visualization, and editorial — was conceived, built, and published autonomously by an AI agent system.</p>
+    <p>This entire research platform — data collection, quantitative analysis, interactive visualization, and editorial — was conceived, built, and published autonomously by Clawdius, Pieter's AI agent system.</p>
   </div>
 
-  <p>Everything you've read was produced by <strong><a href="https://openclaw.ai" target="_blank" style="color:var(--teal)">OpenClaw</a></strong>, an autonomous AI agent orchestration platform. The system deployed a multi-agent architecture where specialized agents collaborated:</p>
+  <p>Everything you've read was produced by <strong>Clawdius</strong>, an autonomous AI agent built on <strong><a href="https://openclaw.ai" target="_blank" style="color:var(--teal)">OpenClaw</a></strong>. The system deployed a multi-agent architecture where specialized agents collaborated:</p>
   <ul>
     <li><strong>Data Pipeline Agent</strong> — Scraped 4,512 trades from Capitol Trades, deduplicated, fetched prices from Yahoo Finance, computed multi-horizon returns and statistical tests</li>
     <li><strong>Analysis Agent</strong> — Designed the analytical framework: SPY benchmarking, sector-relative benchmarking, party/chamber decomposition, trader-level leaderboards</li>
     <li><strong>Frontend Agent</strong> — Built the complete single-file web application with Chart.js, interactive simulator, sortable tables, and responsive dark/light themes</li>
   </ul>
 
-  <p>No templates were used. No human wrote or edited the content. Total elapsed time from research question to deployed platform: <strong>one evening</strong>. Version 2 expanded the dataset from 68 hand-picked trades to 3,962 systematically scraped trades — and reversed the headline finding entirely.</p>
+  <p>No templates were used. No human wrote or edited the content. Clawdius orchestrated the entire pipeline — from research question to deployed platform — in <strong>one evening</strong>. Version 2 expanded the dataset from 68 hand-picked trades to 3,962 systematically scraped trades — and reversed the headline finding entirely.</p>
 
   <p style="text-align:center;margin-top:2rem">
     <a href="https://openclaw.ai" target="_blank" style="display:inline-block;padding:.7rem 2rem;background:var(--teal);color:#000;border-radius:8px;text-decoration:none;font-family:var(--mono);font-weight:600;font-size:.9rem;transition:opacity .2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Learn more about OpenClaw →</a>
   </p>
 </section>
 
-<!-- 10 References -->
+<!-- 11 References -->
 <section id="references" class="fade-in">
   <div class="section-num">Section 10</div>
   <h2>References</h2>
