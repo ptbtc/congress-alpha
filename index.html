@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Congressional Trading Alpha | 3,962 Trades — Does Copycat Trading Beat the Market?</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230a0f1a'/%3E%3Cpolyline points='4,22 10,16 16,19 22,10 28,13' fill='none' stroke='%2314b8a6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='28' cy='13' r='2' fill='%2314b8a6'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231a1a2e'/%3E%3Cpolyline points='4,22 10,16 16,19 22,10 28,13' fill='none' stroke='%231e3a5f' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='28' cy='13' r='2' fill='%23b8860b'/%3E%3C/svg%3E">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Congressional Trading Alpha — 3,962 Trades Exposed">
 <meta property="og:description" content="3,962 trades from 71 politicians. Copycat trading does NOT beat the market. Mean 30d excess: -0.74% (p < 0.001). Independent empirical research.">
-<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%230a0f1a'/%3E%3Ctext x='600' y='280' text-anchor='middle' fill='%2314b8a6' font-size='64' font-family='Georgia,serif' font-weight='700'%3ECongressional Trading Alpha%3C/text%3E%3Ctext x='600' y='370' text-anchor='middle' fill='%2394a3b8' font-size='28' font-family='Georgia,serif'%3E3%2C962 Trades — The Pelosi Tracker Is Noise%3C/text%3E%3C/svg%3E">
+<meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 630'%3E%3Crect width='1200' height='630' fill='%231a1a2e'/%3E%3Ctext x='600' y='280' text-anchor='middle' fill='%23b8860b' font-size='64' font-family='Georgia,serif' font-weight='700'%3ECongressional Trading Alpha%3C/text%3E%3Ctext x='600' y='370' text-anchor='middle' fill='%2394a3b8' font-size='28' font-family='Georgia,serif'%3E3%2C962 Trades — The Pelosi Tracker Is Noise%3C/text%3E%3C/svg%3E">
 <meta property="og:url" content="https://congress-alpha.research.dev">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Congressional Trading Alpha — 3,962 Trades Exposed">
@@ -19,60 +19,67 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0f1a;--bg2:#0f1629;--bg3:#141c33;--bg4:#1a2440;
-  --teal:#14b8a6;--teal-dim:rgba(20,184,166,.15);--teal-glow:rgba(20,184,166,.25);
-  --text:#e2e8f0;--text-dim:#94a3b8;--text-bright:#f1f5f9;
-  --red:#ef4444;--green:#22c55e;--amber:#f59e0b;--purple:#a78bfa;
-  --blue:#3b82f6;
-  --border:#1e293b;--border-light:#2d3a56;
+  --bg:#faf8f5;--bg2:#ffffff;--bg3:#f0ece6;--bg4:#e8e4dd;
+  --navy:#1e3a5f;--navy-light:#2a4f7a;--navy-bright:#4a7ab5;
+  --gold:#b8860b;--gold-light:#d4a017;--gold-dim:rgba(184,134,11,.12);
+  --burgundy:#8b1a1a;--forest:#2d5016;
+  --charcoal:#3d3d3d;--slate:#5a6577;
+  --text:#2c2c2c;--text-dim:#5a6577;--text-bright:#1a1a1a;
+  --border:#d8d2c8;--border-light:#c8c0b4;
   --heading:'Playfair Display',Georgia,serif;
   --body:'Source Serif Pro',Georgia,serif;
   --mono:'JetBrains Mono','Fira Code',monospace;
   --sidebar-w:260px;
   --max-w:900px;
 }
-[data-theme="light"]{
-  --bg:#f8fafc;--bg2:#f1f5f9;--bg3:#e2e8f0;--bg4:#cbd5e1;
-  --text:#1e293b;--text-dim:#475569;--text-bright:#0f172a;
-  --border:#cbd5e1;--border-light:#94a3b8;
-  --teal-dim:rgba(20,184,166,.1);--teal-glow:rgba(20,184,166,.15);
+[data-theme="dark"]{
+  --bg:#1a1a2e;--bg2:#232340;--bg3:#2a2a4a;--bg4:#333358;
+  --navy-bright:#6b9fd4;--gold-light:#e0b830;
+  --text:#e8e6e3;--text-dim:#9a96a8;--text-bright:#f0eee8;
+  --border:#3a3a58;--border-light:#4a4a68;
+  --gold-dim:rgba(184,134,11,.2);
 }
 html{scroll-behavior:smooth;font-size:16px}
 body{
-  font-family:var(--body);color:var(--text);background:var(--bg);
+  font-family:var(--body);color:var(--text);
+  background-color:var(--bg);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23faf8f5'/%3E%3Crect width='1' height='1' fill='%23f0ece6' opacity='0.4'/%3E%3C/svg%3E");
   line-height:1.75;-webkit-font-smoothing:antialiased;
-  transition:background .3s,color .3s;
+  transition:background-color .3s,color .3s;
   font-feature-settings:'tnum' 1;
+}
+[data-theme="dark"] body{
+  background-image:none;
 }
 
 /* Sidebar */
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;
-  background:var(--bg2);border-right:1px solid var(--border);
+  background:#1a1a2e;border-right:1px solid #2a2a4a;
   overflow-y:auto;z-index:100;padding:2rem 0;transition:transform .3s;
 }
 .sidebar-logo{
   font-family:var(--heading);font-size:1.1rem;font-weight:700;
-  color:var(--teal);padding:0 1.5rem 1.5rem;letter-spacing:-.02em;
-  border-bottom:1px solid var(--border);margin-bottom:1rem;
+  color:var(--gold);padding:0 1.5rem 1.5rem;letter-spacing:-.02em;
+  border-bottom:1px solid #2a2a4a;margin-bottom:1rem;
 }
 .sidebar nav a{
   display:flex;align-items:center;gap:.6rem;
-  padding:.55rem 1.5rem;font-size:.82rem;color:var(--text-dim);
+  padding:.55rem 1.5rem;font-size:.82rem;color:#9a96a8;
   text-decoration:none;transition:all .2s;font-family:var(--body);
   border-left:2px solid transparent;
 }
 .sidebar nav a:hover,.sidebar nav a.active{
-  color:var(--teal);background:var(--teal-dim);border-left-color:var(--teal);
+  color:#e8e6e3;background:rgba(30,58,95,.4);border-left-color:var(--gold);
 }
 .sidebar nav a .num{
-  font-family:var(--mono);font-size:.7rem;color:var(--text-dim);
-  min-width:1.4rem;opacity:.6;
+  font-family:var(--mono);font-size:.7rem;color:#9a96a8;
+  min-width:1.4rem;opacity:.6;font-variant:small-caps;
 }
 .sidebar-toggle{
   display:none;position:fixed;top:1rem;left:1rem;z-index:200;
-  background:var(--bg2);border:1px solid var(--border);border-radius:6px;
-  color:var(--text);width:40px;height:40px;cursor:pointer;font-size:1.2rem;line-height:1;
+  background:#1a1a2e;border:1px solid #2a2a4a;border-radius:6px;
+  color:#e8e6e3;width:40px;height:40px;cursor:pointer;font-size:1.2rem;line-height:1;
 }
 @media(max-width:1024px){
   .sidebar{transform:translateX(-100%)}
@@ -88,19 +95,20 @@ body{
 /* Top Bar */
 .topbar{
   position:sticky;top:0;z-index:50;
-  background:rgba(10,15,26,.85);backdrop-filter:blur(12px);
+  background:rgba(250,248,245,.92);backdrop-filter:blur(12px);
   border-bottom:1px solid var(--border);
   padding:.6rem 2rem;display:flex;align-items:center;justify-content:flex-end;gap:.8rem;
 }
-[data-theme="light"] .topbar{background:rgba(248,250,252,.85)}
+[data-theme="dark"] .topbar{background:rgba(26,26,46,.92)}
 .topbar button{
   background:none;border:1px solid var(--border);border-radius:6px;
   color:var(--text-dim);padding:.35rem .7rem;font-size:.75rem;cursor:pointer;
   font-family:var(--mono);transition:all .2s;
 }
-.topbar button:hover{border-color:var(--teal);color:var(--teal)}
+.topbar button:hover{border-color:var(--navy);color:var(--navy)}
+[data-theme="dark"] .topbar button:hover{border-color:var(--navy-bright);color:var(--navy-bright)}
 .topbar .share-toast{
-  position:absolute;right:2rem;top:3rem;background:var(--teal);color:#000;
+  position:absolute;right:2rem;top:3rem;background:var(--navy);color:#fff;
   padding:.4rem .8rem;border-radius:6px;font-size:.75rem;font-family:var(--mono);
   opacity:0;transition:opacity .3s;pointer-events:none;
 }
@@ -108,10 +116,12 @@ body{
 
 /* Hero */
 .hero{
-  padding:6rem 0 4rem;text-align:center;
-  background:linear-gradient(180deg,rgba(20,184,166,.06) 0%,transparent 60%);
-  border-bottom:1px solid var(--border);margin-bottom:1.5rem;
+  padding:6rem 0 3.5rem;text-align:center;
+  background:var(--bg2);
+  border-bottom:none;margin-bottom:0;
+  box-shadow:0 2px 16px rgba(0,0,0,.06);
 }
+[data-theme="dark"] .hero{box-shadow:0 2px 16px rgba(0,0,0,.2)}
 .hero h1{
   font-family:var(--heading);font-size:2.6rem;font-weight:700;
   color:var(--text-bright);line-height:1.2;max-width:750px;margin:0 auto .8rem;
@@ -120,48 +130,47 @@ body{
 .hero .subtitle{
   font-family:var(--body);font-size:1.12rem;color:var(--text);opacity:.85;
   max-width:650px;margin:0 auto 1rem;font-style:italic;
-  text-shadow:0 1px 8px rgba(0,0,0,.3);
 }
-.hero .meta{font-family:var(--mono);font-size:.78rem;color:var(--teal);letter-spacing:.08em;text-transform:uppercase}
+.hero .meta{font-family:var(--mono);font-size:.78rem;color:var(--navy);letter-spacing:.08em;text-transform:uppercase}
+[data-theme="dark"] .hero .meta{color:var(--navy-bright)}
+
+.hero-rule{
+  max-width:var(--max-w);margin:0 auto;
+  border:none;border-top:2px solid var(--navy);
+  opacity:.3;
+}
 
 .stat-cards{
   display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;
   max-width:860px;margin:2.5rem auto 0;
 }
 .stat-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
   padding:1.8rem 1.3rem;text-align:center;transition:border-color .3s,transform .2s,box-shadow .3s;
   position:relative;overflow:hidden;
+  border-left:3px solid var(--navy);
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
-.stat-card::before{
-  content:'';position:absolute;inset:-1px;border-radius:13px;
-  background:linear-gradient(135deg,var(--teal),var(--purple),var(--teal));
-  background-size:300% 300%;animation:stat-glow 4s ease infinite;
-  opacity:0;transition:opacity .3s;z-index:0;
-}
-.stat-card::after{
-  content:'';position:absolute;inset:1px;border-radius:11px;
-  background:var(--bg2);z-index:1;
-}
-.stat-card>*{position:relative;z-index:2}
-.stat-card:hover::before{opacity:1}
-.stat-card:hover{border-color:transparent;transform:translateY(-3px);box-shadow:0 8px 32px rgba(20,184,166,.15)}
-@keyframes stat-glow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+[data-theme="dark"] .stat-card{box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08)}
+[data-theme="dark"] .stat-card:hover{box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .stat-card .value{
   font-family:var(--mono);font-size:2rem;font-weight:700;
   line-height:1.2;
 }
-.stat-card .value.negative-val{color:var(--red)}
-.stat-card .value.positive-val{color:var(--teal)}
+.stat-card .value.negative-val{color:var(--burgundy)}
+.stat-card .value.positive-val{color:var(--forest)}
 .stat-card .label{font-size:.78rem;color:var(--text-dim);margin-top:.5rem;line-height:1.4}
 
 /* Sections */
 section{padding:5rem 0 4rem;border-bottom:1px solid var(--border)}
 section:last-of-type{border-bottom:none}
 .section-num{
-  font-family:var(--mono);font-size:.72rem;color:var(--teal);
+  font-family:var(--mono);font-size:.72rem;color:var(--navy);
   letter-spacing:.12em;text-transform:uppercase;margin-bottom:.5rem;
+  font-variant:small-caps;
 }
+[data-theme="dark"] .section-num{color:var(--navy-bright)}
 h2{
   font-family:var(--heading);font-size:2rem;font-weight:700;
   color:var(--text-bright);margin-bottom:1.5rem;letter-spacing:-.02em;
@@ -179,86 +188,107 @@ h4{
 }
 p{margin-bottom:1.2rem}
 strong{color:var(--text-bright)}
-.highlight{color:var(--teal);font-weight:600}
+a{color:var(--navy);text-decoration:none;transition:color .2s}
+a:hover{color:var(--navy-light)}
+[data-theme="dark"] a{color:var(--navy-bright)}
+[data-theme="dark"] a:hover{color:#8cb8e0}
+.highlight{color:var(--navy);font-weight:600}
+[data-theme="dark"] .highlight{color:var(--navy-bright)}
 .mono{font-family:var(--mono)}
 
 /* Charts */
 .chart-container{
-  background:var(--bg2);border:1px solid var(--border-light);border-radius:12px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:10px;
   padding:2rem;margin:2rem 0;position:relative;
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  box-shadow:0 2px 12px rgba(0,0,0,.05);
 }
+[data-theme="dark"] .chart-container{box-shadow:0 2px 12px rgba(0,0,0,.2)}
 .chart-container .chart-title{
   font-family:var(--heading);font-size:1.15rem;font-weight:700;
-  color:var(--teal);margin-bottom:.4rem;letter-spacing:-.01em;
+  color:var(--navy);margin-bottom:.4rem;letter-spacing:-.01em;
 }
+[data-theme="dark"] .chart-container .chart-title{color:var(--navy-bright)}
 .chart-container .chart-subtitle{
   font-family:var(--body);font-size:.82rem;color:var(--text-dim);margin-bottom:1.2rem;
 }
 .chart-container canvas{max-height:380px}
 
 /* Tables */
-.table-wrap{overflow-x:auto;margin:2rem 0;border-radius:12px;border:1px solid var(--border-light);box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.table-wrap{overflow-x:auto;margin:2rem 0;border-radius:10px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,.04)}
+[data-theme="dark"] .table-wrap{box-shadow:0 2px 8px rgba(0,0,0,.2)}
 table{width:100%;border-collapse:collapse;font-size:.82rem}
-thead{background:var(--bg3)}
+thead{background:var(--navy)}
+[data-theme="dark"] thead{background:var(--navy)}
 th{
   font-family:var(--mono);font-weight:500;text-transform:uppercase;
-  font-size:.7rem;letter-spacing:.08em;color:var(--text-dim);
+  font-size:.7rem;letter-spacing:.08em;color:#ffffff;
   padding:1rem .9rem;text-align:left;cursor:pointer;
-  user-select:none;white-space:nowrap;border-bottom:1px solid var(--border);
+  user-select:none;white-space:nowrap;border-bottom:none;
   transition:color .2s;
 }
-th:hover{color:var(--teal)}
+th:hover{color:var(--gold-light)}
 th .sort-arrow{font-size:.6rem;margin-left:.3rem;opacity:.5}
 td{
   padding:.85rem .9rem;border-bottom:1px solid var(--border);
   font-family:var(--body);font-size:.82rem;vertical-align:middle;
+  border-left:none;border-right:none;
 }
 tr:last-child td{border-bottom:none}
 tbody tr{transition:background .15s}
-tbody tr:hover{background:var(--teal-dim)}
-tbody tr:nth-child(even){background:rgba(255,255,255,.02)}
-[data-theme="light"] tbody tr:nth-child(even){background:rgba(0,0,0,.02)}
-tbody tr:nth-child(even):hover{background:var(--teal-dim)}
+tbody tr:hover{background:rgba(30,58,95,.06)}
+[data-theme="dark"] tbody tr:hover{background:rgba(30,58,95,.2)}
+tbody tr:nth-child(even){background:rgba(0,0,0,.02)}
+[data-theme="dark"] tbody tr:nth-child(even){background:rgba(255,255,255,.02)}
+tbody tr:nth-child(even):hover{background:rgba(30,58,95,.06)}
+[data-theme="dark"] tbody tr:nth-child(even):hover{background:rgba(30,58,95,.2)}
 td.num{font-family:var(--mono);text-align:right}
-.positive{color:var(--green)}
-.negative{color:var(--red)}
+.positive{color:var(--forest)}
+.negative{color:var(--burgundy)}
 .tag{
   display:inline-block;padding:.15rem .5rem;border-radius:4px;
   font-family:var(--mono);font-size:.68rem;
 }
-.tag-dem{background:rgba(59,130,246,.15);color:#60a5fa}
-.tag-rep{background:rgba(239,68,68,.15);color:#f87171}
+.tag-dem{background:rgba(59,130,246,.15);color:#2563eb}
+.tag-rep{background:rgba(139,26,26,.12);color:var(--burgundy)}
+[data-theme="dark"] .tag-dem{background:rgba(59,130,246,.2);color:#60a5fa}
+[data-theme="dark"] .tag-rep{background:rgba(139,26,26,.2);color:#e05555}
 
 /* Definition Box */
 .definition-box{
-  max-width:860px;margin:0 auto 2rem;padding:1.2rem 1.8rem;
-  background:var(--bg2);border:1px solid var(--teal);border-radius:10px;
+  max-width:860px;margin:1.5rem auto 2rem;padding:1.2rem 1.8rem;
+  background:var(--bg2);border:1px solid var(--navy);border-radius:10px;
   font-size:.9rem;line-height:1.7;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
+[data-theme="dark"] .definition-box{box-shadow:0 2px 8px rgba(0,0,0,.2)}
 
 /* Methodology Callout */
 .methodology-callout{
-  background:var(--bg2);border:1px solid var(--amber);border-radius:10px;
+  background:var(--bg2);border:1px solid var(--gold);border-radius:10px;
   padding:1.5rem 2rem;margin:2rem 0;position:relative;overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.04);
 }
+[data-theme="dark"] .methodology-callout{box-shadow:0 2px 8px rgba(0,0,0,.2)}
 .methodology-callout::before{
   content:'📊';position:absolute;top:1.2rem;left:1.2rem;font-size:1.2rem;
 }
 .methodology-callout h4{
-  margin:0 0 .8rem 2rem;color:var(--amber);font-family:var(--heading);
+  margin:0 0 .8rem 2rem;color:var(--gold);font-family:var(--heading);
 }
+[data-theme="dark"] .methodology-callout h4{color:var(--gold-light)}
 .methodology-callout ul{margin-left:2rem;font-size:.88rem}
 .methodology-callout li{margin-bottom:.3rem;color:var(--text-dim)}
 
 /* Simulator */
 .simulator{
-  background:var(--bg2);border:1px solid var(--teal);border-radius:12px;
+  background:var(--bg2);border:1px solid var(--navy);border-radius:12px;
   padding:2rem;margin:2rem 0;position:relative;overflow:hidden;
+  box-shadow:0 2px 12px rgba(0,0,0,.05);
 }
+[data-theme="dark"] .simulator{box-shadow:0 2px 12px rgba(0,0,0,.2)}
 .simulator::before{
   content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--teal),var(--purple),var(--teal));
+  background:linear-gradient(90deg,var(--navy),var(--gold),var(--navy));
 }
 .sim-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem}
 @media(max-width:700px){.sim-grid{grid-template-columns:1fr}}
@@ -266,11 +296,12 @@ td.num{font-family:var(--mono);text-align:right}
   display:block;font-family:var(--mono);font-size:.75rem;
   color:var(--text-dim);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em;
 }
-.sim-controls input[type="range"]{width:100%;accent-color:var(--teal);margin-bottom:.3rem;height:6px}
-.sim-controls .range-val{font-family:var(--mono);font-size:1.1rem;color:var(--teal);font-weight:500}
+.sim-controls input[type="range"]{width:100%;accent-color:var(--navy);margin-bottom:.3rem;height:6px}
+.sim-controls .range-val{font-family:var(--mono);font-size:1.1rem;color:var(--navy);font-weight:500}
+[data-theme="dark"] .sim-controls .range-val{color:var(--navy-bright)}
 .sim-controls .control-group{margin-bottom:1.5rem}
 .sim-controls select{
-  width:100%;padding:.5rem;background:var(--bg3);border:1px solid var(--border);
+  width:100%;padding:.5rem;background:var(--bg);border:1px solid var(--border);
   border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.82rem;
 }
 .sim-controls .checkbox-group{display:flex;gap:1rem;margin-top:.3rem;flex-wrap:wrap}
@@ -278,56 +309,63 @@ td.num{font-family:var(--mono);text-align:right}
   display:flex;align-items:center;gap:.4rem;cursor:pointer;
   text-transform:none;font-size:.85rem;color:var(--text);
 }
-.sim-controls input[type="checkbox"]{accent-color:var(--teal)}
-.sim-results{background:var(--bg3);border-radius:10px;padding:1.5rem}
+.sim-controls input[type="checkbox"]{accent-color:var(--navy)}
+.sim-results{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:1.5rem}
 .sim-result-item{
   display:flex;justify-content:space-between;align-items:baseline;
   padding:.7rem 0;border-bottom:1px solid var(--border);
 }
 .sim-result-item:last-child{border-bottom:none}
 .sim-result-item .r-label{font-size:.82rem;color:var(--text-dim)}
-.sim-result-item .r-value{font-family:var(--mono);font-size:1.3rem;font-weight:500;color:var(--teal)}
-.sim-result-item .r-value.neg{color:var(--red)}
+.sim-result-item .r-value{font-family:var(--mono);font-size:1.3rem;font-weight:500;color:var(--navy)}
+[data-theme="dark"] .sim-result-item .r-value{color:var(--navy-bright)}
+.sim-result-item .r-value.neg{color:var(--burgundy)}
 .sim-chart-container{margin-top:1.5rem}
 .sim-chart-container canvas{max-height:300px}
 
 /* Key Takeaway Callout */
 .key-takeaway{
-  border-left:4px solid var(--teal);background:rgba(20,184,166,.06);
+  border-left:4px solid var(--navy);background:#f8f6f3;
   border-radius:0 10px 10px 0;padding:1.2rem 1.5rem;margin:1.5rem 0 2rem;
   font-size:.95rem;
 }
-.key-takeaway.negative{border-left-color:var(--red);background:rgba(239,68,68,.06)}
+[data-theme="dark"] .key-takeaway{background:rgba(30,58,95,.15)}
+.key-takeaway.negative{border-left-color:var(--burgundy);background:rgba(139,26,26,.05)}
+[data-theme="dark"] .key-takeaway.negative{background:rgba(139,26,26,.12)}
 .key-takeaway .kt-label{
   font-family:var(--mono);font-size:.68rem;text-transform:uppercase;
-  letter-spacing:.12em;color:var(--teal);margin-bottom:.4rem;display:block;
+  letter-spacing:.12em;color:var(--navy);margin-bottom:.4rem;display:block;
 }
-.key-takeaway.negative .kt-label{color:var(--red)}
+[data-theme="dark"] .key-takeaway .kt-label{color:var(--navy-bright)}
+.key-takeaway.negative .kt-label{color:var(--burgundy)}
 .key-takeaway p{
   margin:0;font-weight:600;color:var(--text-bright);line-height:1.6;
 }
 
 /* Blockquotes */
 blockquote{
-  border-left:4px solid var(--teal);padding:1rem 1.5rem;margin:1.5rem 0;
-  background:var(--teal-dim);border-radius:0 10px 10px 0;
+  border-left:4px solid var(--gold);padding:1rem 1.5rem;margin:1.5rem 0;
+  background:var(--gold-dim);border-radius:0 10px 10px 0;
   font-style:italic;color:var(--text-dim);
 }
 .citation{
-  font-family:var(--body);font-size:.85rem;color:var(--text-dim);
-  padding:.5rem 0;border-bottom:1px solid var(--border);margin-bottom:.5rem;
+  font-family:var(--body);font-size:.82rem;color:var(--text-dim);
+  padding:.5rem 0 .5rem 2rem;text-indent:-2rem;
+  border-bottom:1px solid var(--border);margin-bottom:.5rem;
+  line-height:1.6;
 }
 .citation strong{color:var(--text)}
 ul,ol{margin:.8rem 0 1.2rem 1.5rem}
 li{margin-bottom:.4rem}
-li::marker{color:var(--teal)}
+li::marker{color:var(--navy)}
+[data-theme="dark"] li::marker{color:var(--navy-bright)}
 
 /* Trade Explorer */
 .explorer-controls{
   display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem;
 }
 .explorer-controls select,.explorer-controls input{
-  padding:.5rem .8rem;background:var(--bg3);border:1px solid var(--border);
+  padding:.5rem .8rem;background:var(--bg2);border:1px solid var(--border);
   border-radius:6px;color:var(--text);font-family:var(--mono);font-size:.8rem;
   min-width:140px;
 }
@@ -336,7 +374,7 @@ li::marker{color:var(--teal)}
 
 /* Toast */
 .toast{
-  position:fixed;bottom:2rem;right:2rem;background:var(--teal);color:#000;
+  position:fixed;bottom:2rem;right:2rem;background:var(--navy);color:#fff;
   padding:.8rem 1.5rem;border-radius:8px;font-family:var(--mono);font-size:.85rem;
   font-weight:600;z-index:1000;opacity:0;transform:translateY(20px);
   transition:opacity .3s,transform .3s;pointer-events:none;
@@ -352,7 +390,8 @@ footer{
   font-size:.78rem;color:var(--text-dim);font-family:var(--mono);
   line-height:2;
 }
-footer a{color:var(--teal);text-decoration:none}
+footer a{color:var(--navy);text-decoration:none}
+[data-theme="dark"] footer a{color:var(--navy-bright)}
 footer .footer-meta{display:block;margin-bottom:.3rem}
 
 /* Print */
@@ -363,19 +402,21 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   a[href]{text-decoration:none;color:inherit}
   section{page-break-before:auto;padding:2rem 0}
   .main{margin-left:0!important}
-  body{background:#fff;color:#000;font-size:11pt}
-  .hero{padding:2rem 0}
+  body{background:#fff;color:#000;font-size:11pt;background-image:none}
+  .hero{padding:2rem 0;box-shadow:none}
   h2{page-break-after:avoid}
-  .chart-container,.table-wrap{page-break-inside:avoid}
+  .chart-container,.table-wrap{page-break-inside:avoid;box-shadow:none}
   .stat-card{border:1px solid #ccc;box-shadow:none}
-  .stat-card::before,.stat-card::after{display:none}
+  thead{background:#1e3a5f;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  th{color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .methodology-callout{border-color:#ccc}
   .key-takeaway{border-left-color:#333;background:#f0f0f0}
   .tag-dem{background:#dbeafe;color:#1e40af}
   .tag-rep{background:#fee2e2;color:#991b1b}
-  .positive{color:#166534}
-  .negative{color:#991b1b}
+  .positive{color:#2d5016}
+  .negative{color:#8b1a1a}
   tbody tr:nth-child(even){background:#f9fafb!important}
+  .citation{font-size:.78rem}
 }
 
 /* Responsive */
@@ -396,7 +437,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 /* Loading Spinner */
 .page-loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;transition:opacity .4s ease}
 .page-loader.hidden{opacity:0;pointer-events:none}
-.spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+.spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -425,7 +466,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
 <div class="main">
 
 <div class="topbar">
-  <button onclick="toggleTheme()" id="theme-btn">☀ Light</button>
+  <button onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
   <button onclick="shareResearch()">⛓ Share</button>
   <button onclick="window.print()">🖨 Print</button>
   <button onclick="window.print()" title="Uses browser print-to-PDF">📥 PDF</button>
@@ -441,7 +482,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <p class="subtitle">3,962 trades. 71 politicians. 793 tickers. Copycat trading does not beat the market.</p>
   <div class="stat-cards">
     <div class="stat-card fade-in">
-      <div class="value" style="color:var(--teal)">3,962</div>
+      <div class="value" style="color:var(--gold)">3,962</div>
       <div class="label">Trades Analyzed<br>Cutoff: 31 Mar 2026</div>
     </div>
     <div class="stat-card fade-in">
@@ -453,15 +494,17 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
       <div class="label">Win Rate at 30d<br>vs SPY Benchmark</div>
     </div>
     <div class="stat-card fade-in">
-      <div class="value" style="color:var(--teal)">71 / 793</div>
+      <div class="value" style="color:var(--gold)">71 / 793</div>
       <div class="label">Politicians / Tickers<br>House &amp; Senate</div>
     </div>
   </div>
 </header>
 
+<hr class="hero-rule">
+
 <!-- Definition Box -->
 <div class="definition-box">
-  <strong style="color:var(--teal)">📊 Excess Return</strong> = Copycat trade return − SPY return over the same period, measured <strong>from the disclosure date</strong> (when the trade becomes public), not the trade date. This isolates what an outside investor could actually achieve.
+  <strong style="color:var(--navy)">📊 Excess Return</strong> = Copycat trade return − SPY return over the same period, measured <strong>from the disclosure date</strong> (when the trade becomes public), not the trade date. This isolates what an outside investor could actually achieve.
 </div>
 
 <!-- 01 Executive Summary -->
@@ -473,9 +516,9 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
     <p>Copying congressional trades at disclosure generates negative alpha. Mean 30d excess return: −0.74% (p&nbsp;&lt;&nbsp;0.001). The underperformance worsens with horizon.</p>
   </div>
 
-  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank" style="color:var(--teal)">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, with a data collection cutoff of March 31, 2026. Trades disclosed after September 2025 were excluded from the return analysis because they lack sufficient forward price history (30–180 days) for meaningful return calculation. All prices were fetched from Yahoo Finance.</p>
+  <p>We scraped 4,512 trades from <a href="https://capitoltrades.com" target="_blank">Capitol Trades</a>, which aggregates from US House &amp; Senate Periodic Transaction Report (PTR) filings under the STOCK Act. After deduplication and filtering to stock trades with valid tickers, <strong class="highlight">3,962 trades</strong> remained across 71 politicians and 793 tickers, with a data collection cutoff of March 31, 2026. Trades disclosed after September 2025 were excluded from the return analysis because they lack sufficient forward price history (30–180 days) for meaningful return calculation. All prices were fetched from Yahoo Finance.</p>
 
-  <p><strong>The finding:</strong> copying congressional trades at disclosure does <em>not</em> generate alpha. The mean 30-day excess return is <strong class="highlight" style="color:var(--red)">−0.74%</strong> (t = −5.18, p &lt; 0.001), with only 43.5% of trades beating SPY. The underperformance <em>worsens</em> with horizon: −1.37% at 60 days, −1.84% at 90 days. Every horizon is statistically significant at the 1% level.</p>
+  <p><strong>The finding:</strong> copying congressional trades at disclosure does <em>not</em> generate alpha. The mean 30-day excess return is <strong style="color:var(--burgundy);font-weight:600">−0.74%</strong> (t = −5.18, p &lt; 0.001), with only 43.5% of trades beating SPY. The underperformance <em>worsens</em> with horizon: −1.37% at 60 days, −1.84% at 90 days. Every horizon is statistically significant at the 1% level.</p>
 
   <p>The signal is concentrated in a handful of individuals. Boozman (+2.91% at 30d, 62% win rate, 52 trades) and Tuberville (+4.71%, 54% win rate, 26 trades) show positive alpha. Tim Moore leads with +9.27% across 15 trades. But these are exceptions — the aggregate is decisively negative, and most high-volume traders (Ro Khanna with 1,297 trades at −1.82%, McCaul with 470 at −1.73%) drag the mean down.</p>
 
@@ -506,7 +549,7 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
   <p>For sell trades, excess returns are calculated identically to buys (forward return from disclosure). Trade values use STOCK Act range midpoints. No transaction costs, slippage, or portfolio construction rules are modeled.</p>
 </section>
 
-<!-- 03 Key Literature -->
+<!-- 03 Findings -->
 <section id="findings" class="fade-in">
   <div class="section-num">Section 03</div>
   <h2>Findings</h2>
@@ -686,13 +729,13 @@ footer .footer-meta{display:block;margin-bottom:.3rem}
         </div>
       </div>
       <div class="sim-results">
-        <h4 style="margin-top:0;color:var(--teal);font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Estimated Performance</h4>
+        <h4 style="margin-top:0;color:var(--navy);font-family:var(--mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.1em">Estimated Performance</h4>
         <div class="sim-result-item"><span class="r-label">Mean Excess Return</span><span class="r-value neg" id="sim-excess">−0.74%</span></div>
         <div class="sim-result-item"><span class="r-label">Median Excess Return</span><span class="r-value neg" id="sim-median">−1.15%</span></div>
         <div class="sim-result-item"><span class="r-label">Win Rate vs SPY</span><span class="r-value" id="sim-winrate">43.5%</span></div>
         <div class="sim-result-item"><span class="r-label">t-Statistic</span><span class="r-value" id="sim-tstat">−5.18</span></div>
         <div class="sim-result-item"><span class="r-label">p-Value</span><span class="r-value" id="sim-pval">&lt; 0.001</span></div>
-        <div class="sim-result-item"><span class="r-label">Statistically Significant</span><span class="r-value" id="sim-sig" style="color:var(--red)">Yes (p&lt;0.01)</span></div>
+        <div class="sim-result-item"><span class="r-label">Statistically Significant</span><span class="r-value" id="sim-sig" style="color:var(--burgundy)">Yes (p&lt;0.01)</span></div>
       </div>
     </div>
     <div class="sim-chart-container">
@@ -943,7 +986,7 @@ function fmtPctRaw(n,dec=2){return (n>=0?'+':'')+n.toFixed(dec)+'%'}
 function toggleTheme(){
   const t=document.documentElement.dataset.theme==='dark'?'light':'dark';
   document.documentElement.dataset.theme=t;
-  document.getElementById('theme-btn').textContent=t==='dark'?'☀ Light':'🌙 Dark';
+  document.getElementById('theme-btn').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
   initAllCharts();
 }
 function shareResearch(){
@@ -962,13 +1005,18 @@ function showToast(msg){
    ═══════════════════════════════ */
 
 function isDark(){return document.documentElement.dataset.theme==='dark'}
-function gridColor(){return isDark()?'rgba(255,255,255,.09)':'rgba(0,0,0,.08)'}
-function tickColor(){return isDark()?'#64748b':'#94a3b8'}
-function fontColor(){return isDark()?'#cbd5e1':'#475569'}
+function gridColor(){return isDark()?'rgba(255,255,255,.06)':'rgba(0,0,0,.06)'}
+function tickColor(){return isDark()?'#9a96a8':'#5a6577'}
+function fontColor(){return isDark()?'#e8e6e3':'#2c2c2c'}
+function chartBg(){return isDark()?'#232340':'#ffffff'}
 
-const TEAL='#14b8a6',TEAL_A='rgba(20,184,166,.5)',TEAL_BG='rgba(20,184,166,.12)';
-const PURPLE='#a78bfa',PURPLE_A='rgba(167,139,250,.5)',PURPLE_BG='rgba(167,139,250,.12)';
-const AMBER='#f59e0b',RED='#ef4444',GREEN='#22c55e',BLUE='#3b82f6';
+const NAVY='#1e3a5f',NAVY_A='rgba(30,58,95,.6)',NAVY_BG='rgba(30,58,95,.12)';
+const GOLD='#b8860b',GOLD_A='rgba(184,134,11,.6)',GOLD_BG='rgba(184,134,11,.12)';
+const BURGUNDY='#8b1a1a',BURG_A='rgba(139,26,26,.6)';
+const FOREST='#2d5016',FOREST_A='rgba(45,80,22,.6)';
+const CHARCOAL='#3d3d3d',SLATE='#5a6577';
+const BLUE='#2563eb',BLUE_A='rgba(37,99,235,.5)';
+const RED_PARTY='#8b1a1a',RED_PARTY_A='rgba(139,26,26,.4)';
 
 function baseOpts(){
   return{
@@ -977,10 +1025,10 @@ function baseOpts(){
     plugins:{
       legend:{display:true,labels:{color:fontColor(),font:{family:"'Source Serif Pro',serif",size:12},boxWidth:14,padding:16}},
       tooltip:{
-        backgroundColor:isDark()?'#1e293b':'#fff',
-        titleColor:isDark()?'#e2e8f0':'#1e293b',
-        bodyColor:isDark()?'#94a3b8':'#475569',
-        borderColor:isDark()?'#334155':'#e2e8f0',borderWidth:1,
+        backgroundColor:isDark()?'#232340':'#fff',
+        titleColor:isDark()?'#e8e6e3':'#1a1a1a',
+        bodyColor:isDark()?'#9a96a8':'#5a6577',
+        borderColor:isDark()?'#3a3a58':'#d8d2c8',borderWidth:1,
         padding:12,cornerRadius:8,
         titleFont:{family:"'Playfair Display',serif",size:13,weight:'600'},
         bodyFont:{family:"'JetBrains Mono',monospace",size:11},
@@ -999,7 +1047,7 @@ function destroyAll(){Object.values(charts).forEach(c=>{if(c)c.destroy()});chart
 function initAllCharts(){
   destroyAll();
 
-  // Chart 1: Lag Decay — Negative bars at each horizon
+  // Chart 1: Lag Decay
   const ctx1=document.getElementById('chart-lag').getContext('2d');
   charts.lag=new Chart(ctx1,{
     type:'bar',
@@ -1008,8 +1056,8 @@ function initAllCharts(){
       datasets:[{
         label:'Mean Excess Return (%)',
         data:[-0.74,-1.37,-1.84,-1.61],
-        backgroundColor:['rgba(239,68,68,.5)','rgba(239,68,68,.6)','rgba(239,68,68,.7)','rgba(239,68,68,.55)'],
-        borderColor:[RED,RED,RED,RED],
+        backgroundColor:[BURG_A,BURG_A,'rgba(139,26,26,.7)',BURG_A],
+        borderColor:[BURGUNDY,BURGUNDY,BURGUNDY,BURGUNDY],
         borderWidth:1.5,borderRadius:6,
       }]
     },
@@ -1035,7 +1083,7 @@ function initAllCharts(){
     }
   });
 
-  // Chart 2: Party Comparison — D vs R at each horizon
+  // Chart 2: Party Comparison
   const ctx2=document.getElementById('chart-party').getContext('2d');
   charts.party=new Chart(ctx2,{
     type:'bar',
@@ -1045,12 +1093,12 @@ function initAllCharts(){
         {
           label:'Democrats',
           data:[-0.96,-1.98,-2.50,-3.11],
-          backgroundColor:'rgba(59,130,246,.5)',borderColor:BLUE,borderWidth:1.5,borderRadius:6,
+          backgroundColor:BLUE_A,borderColor:BLUE,borderWidth:1.5,borderRadius:6,
         },
         {
           label:'Republicans',
           data:[-0.44,-0.55,-0.95,0.41],
-          backgroundColor:'rgba(239,68,68,.4)',borderColor:RED,borderWidth:1.5,borderRadius:6,
+          backgroundColor:RED_PARTY_A,borderColor:RED_PARTY,borderWidth:1.5,borderRadius:6,
         }
       ]
     },
@@ -1072,7 +1120,7 @@ function initAllCharts(){
     }
   });
 
-  // Chart 3: Sector Excess vs Sector ETFs (horizontal bars, 30d)
+  // Chart 3: Sector Excess vs Sector ETFs
   const sectorsSorted=[...SECTOR_DATA].sort((a,b)=>a.excess_sector-b.excess_sector);
   const ctx3=document.getElementById('chart-sectors').getContext('2d');
   charts.sectors=new Chart(ctx3,{
@@ -1083,10 +1131,10 @@ function initAllCharts(){
         label:'Excess vs Sector ETF (%)',
         data:sectorsSorted.map(d=>+(d.excess_sector*100).toFixed(2)),
         backgroundColor:sectorsSorted.map(d=>{
-          if(d.excess_sector>0)return `rgba(20,184,166,${Math.min(.3+d.excess_sector*10,.8)})`;
-          return `rgba(239,68,68,${Math.min(.3+Math.abs(d.excess_sector)*10,.8)})`;
+          if(d.excess_sector>0)return `rgba(30,58,95,${Math.min(.3+d.excess_sector*10,.7)})`;
+          return `rgba(139,26,26,${Math.min(.3+Math.abs(d.excess_sector)*10,.7)})`;
         }),
-        borderColor:sectorsSorted.map(d=>d.excess_sector>=0?TEAL:RED),
+        borderColor:sectorsSorted.map(d=>d.excess_sector>=0?NAVY:BURGUNDY),
         borderWidth:1.5,borderRadius:4,
       }]
     },
@@ -1124,14 +1172,14 @@ function initAllCharts(){
           data:topTraders.filter(d=>d.party==='democrat').map(d=>({
             x:d.n,y:+(d.e30*100).toFixed(2),r:Math.max(4,Math.sqrt(d.n/10)*3),name:d.name
           })),
-          backgroundColor:'rgba(59,130,246,.45)',borderColor:BLUE,borderWidth:1.5,
+          backgroundColor:BLUE_A,borderColor:BLUE,borderWidth:1.5,
         },
         {
           label:'Republicans',
           data:topTraders.filter(d=>d.party==='republican').map(d=>({
             x:d.n,y:+(d.e30*100).toFixed(2),r:Math.max(4,Math.sqrt(d.n/10)*3),name:d.name
           })),
-          backgroundColor:'rgba(239,68,68,.4)',borderColor:RED,borderWidth:1.5,
+          backgroundColor:RED_PARTY_A,borderColor:RED_PARTY,borderWidth:1.5,
         }
       ]
     },
@@ -1156,8 +1204,7 @@ function initAllCharts(){
     }
   });
 
-  // Chart 5: Histogram of 30d excess returns (simulated distribution)
-  // Based on: mean=-0.74%, median=-1.15%, slight left skew
+  // Chart 5: Histogram of 30d excess returns
   const bins=[
     {label:'< -15%',count:198},
     {label:'-15 to -10%',count:277},
@@ -1183,11 +1230,11 @@ function initAllCharts(){
         label:'Number of Trades',
         data:bins.map(b=>b.count),
         backgroundColor:bins.map((_,i)=>{
-          if(i<6)return `rgba(239,68,68,${0.3+i*0.05})`;
-          if(i===6)return 'rgba(239,68,68,0.25)';
-          return `rgba(20,184,166,${0.2+(i-6)*0.06})`;
+          if(i<6)return `rgba(139,26,26,${0.25+i*0.06})`;
+          if(i===6)return 'rgba(139,26,26,0.2)';
+          return `rgba(30,58,95,${0.2+(i-6)*0.07})`;
         }),
-        borderColor:bins.map((_,i)=>i<=6?RED:TEAL),
+        borderColor:bins.map((_,i)=>i<=6?BURGUNDY:NAVY),
         borderWidth:1,borderRadius:2,
       }]
     },
@@ -1220,7 +1267,6 @@ function initAllCharts(){
 function populateTraderTable(){
   const tbody=document.getElementById('trader-table-body');
   if(!tbody)return;
-  // Show top 15 by trade count
   const top15=[...TRADER_DATA].sort((a,b)=>b.n-a.n).slice(0,15);
   tbody.innerHTML=top15.map(t=>{
     const e30=(t.e30*100).toFixed(2);
@@ -1245,7 +1291,7 @@ function populateTraderTable(){
    TRADE EXPLORER
    ═══════════════════════════════ */
 
-let explorerSortCol=3,explorerSortAsc=false; // default: sort by trades desc
+let explorerSortCol=3,explorerSortAsc=false;
 
 function populateExplorer(){renderExplorer(TRADER_DATA)}
 
@@ -1347,7 +1393,6 @@ function updateSimulator(){
   if(chamber==='house')dataKey='house';
   else if(chamber==='senate')dataKey='senate';
 
-  // If both party and trade type filters active, prioritize trade type
   if(tradeType!=='all')dataKey=tradeType;
   else if(party!=='all'&&chamber==='all')dataKey=party==='D'?'democrat':'republican';
   else if(chamber!=='all'&&party==='all')dataKey=chamber;
@@ -1358,12 +1403,12 @@ function updateSimulator(){
   const excess=(d.mean_excess*100).toFixed(2);
   exEl.textContent=(d.mean_excess>=0?'+':'')+excess+'%';
   exEl.classList.toggle('neg',d.mean_excess<0);
-  exEl.style.color=d.mean_excess<0?'var(--red)':'var(--teal)';
+  exEl.style.color=d.mean_excess<0?'var(--burgundy)':'var(--forest)';
 
   const medEl=document.getElementById('sim-median');
   const median=(d.median_excess*100).toFixed(2);
   medEl.textContent=(d.median_excess>=0?'+':'')+median+'%';
-  medEl.style.color=d.median_excess<0?'var(--red)':'var(--teal)';
+  medEl.style.color=d.median_excess<0?'var(--burgundy)':'var(--forest)';
 
   document.getElementById('sim-winrate').textContent=(d.win_rate*100).toFixed(1)+'%';
   document.getElementById('sim-tstat').textContent=d.t.toFixed(3);
@@ -1372,8 +1417,8 @@ function updateSimulator(){
   pEl.textContent=d.p<0.001?'< 0.001':d.p.toFixed(4);
 
   const sigEl=document.getElementById('sim-sig');
-  if(d.p<0.01){sigEl.textContent='Yes (p<0.01)';sigEl.style.color=d.mean_excess<0?'var(--red)':'var(--green)';}
-  else if(d.p<0.05){sigEl.textContent='Yes (p<0.05)';sigEl.style.color='var(--amber)';}
+  if(d.p<0.01){sigEl.textContent='Yes (p<0.01)';sigEl.style.color=d.mean_excess<0?'var(--burgundy)':'var(--forest)';}
+  else if(d.p<0.05){sigEl.textContent='Yes (p<0.05)';sigEl.style.color='var(--gold)';}
   else{sigEl.textContent='No';sigEl.style.color='var(--text-dim)';}
 
   initSimChart();
@@ -1384,7 +1429,6 @@ function initSimChart(){
   const ctx=document.getElementById('chart-sim');
   if(!ctx)return;
 
-  // Show all horizons for current filter
   const tradeType=document.querySelector('input[name="sim-type"]:checked').value;
   const party=document.getElementById('sim-party').value;
   const chamber=document.getElementById('sim-chamber').value;
@@ -1408,8 +1452,8 @@ function initSimChart(){
         {
           label:'Mean Excess Return (%)',
           data:means,
-          backgroundColor:means.map(v=>v<0?'rgba(239,68,68,.5)':'rgba(20,184,166,.5)'),
-          borderColor:means.map(v=>v<0?RED:TEAL),
+          backgroundColor:means.map(v=>v<0?BURG_A:NAVY_A),
+          borderColor:means.map(v=>v<0?BURGUNDY:NAVY),
           borderWidth:1.5,borderRadius:6,
           yAxisID:'y',
         },
@@ -1417,9 +1461,9 @@ function initSimChart(){
           label:'Win Rate (%)',
           data:winRates,
           type:'line',
-          borderColor:PURPLE,
-          backgroundColor:PURPLE_BG,
-          pointBackgroundColor:PURPLE,
+          borderColor:GOLD,
+          backgroundColor:GOLD_BG,
+          pointBackgroundColor:GOLD,
           pointRadius:5,
           borderWidth:2.5,
           tension:.3,
