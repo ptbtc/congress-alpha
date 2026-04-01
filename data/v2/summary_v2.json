@@ -1,0 +1,255 @@
+{
+  "metadata": {
+    "generated_at": "2026-04-01T07:50:03.474000",
+    "data_source": "Capitol Trades (capitoltrades.com)",
+    "price_source": "Yahoo Finance (yfinance)",
+    "total_trades_scraped": 4512,
+    "unique_trades": 4077,
+    "trades_with_prices": 3962,
+    "failed_tickers": [
+      "8376923Z",
+      "ABB",
+      "ALE",
+      "ANSS",
+      "ARCH",
+      "BECN",
+      "BERY",
+      "CDAY",
+      "CEQP",
+      "CHX",
+      "CWEN.A",
+      "DFS",
+      "DNB",
+      "FLT",
+      "INFN",
+      "IRBT",
+      "ITCI",
+      "JNPR",
+      "K",
+      "LAZR",
+      "LGF-A",
+      "LSXMA",
+      "LTHM",
+      "MODG",
+      "MSDA",
+      "NCR",
+      "NS",
+      "NYCB",
+      "PPBI",
+      "PRMW",
+      "PXD",
+      "RE",
+      "RGBM",
+      "SKX",
+      "SMAR",
+      "SNV",
+      "SOI",
+      "SQ",
+      "STRZA",
+      "SWTX",
+      "VAPO",
+      "WBA",
+      "X"
+    ],
+    "date_range": {
+      "earliest_trade": "2023-04-24",
+      "latest_trade": "2025-09-02"
+    },
+    "disclosure_range": {
+      "earliest": "2024-03-29",
+      "latest": "2025-09-15"
+    }
+  },
+  "headline_numbers": {
+    "total_trades_analyzed": 3962,
+    "mean_30d_excess_return_pct": -0.74,
+    "win_rate_30d_pct": 43.5,
+    "statistically_significant_30d": true
+  },
+  "by_horizon": {
+    "30d": {
+      "n": 3962,
+      "mean_excess_return_pct": -0.74,
+      "median_excess_return_pct": -1.15,
+      "win_rate_pct": 43.5,
+      "t_statistic": -5.18,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "60d": {
+      "n": 3962,
+      "mean_excess_return_pct": -1.37,
+      "median_excess_return_pct": -2.13,
+      "win_rate_pct": 41.8,
+      "t_statistic": -6.749,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "90d": {
+      "n": 3962,
+      "mean_excess_return_pct": -1.84,
+      "median_excess_return_pct": -3.54,
+      "win_rate_pct": 39.6,
+      "t_statistic": -6.742,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "180d": {
+      "n": 3962,
+      "mean_excess_return_pct": -1.61,
+      "median_excess_return_pct": -4.55,
+      "win_rate_pct": 41.2,
+      "t_statistic": -3.433,
+      "p_value": 0.0006,
+      "significant": true
+    }
+  },
+  "by_party": {
+    "democrat": {
+      "30d_mean_excess_pct": -0.96,
+      "30d_win_rate_pct": 43.0,
+      "60d_mean_excess_pct": -1.98,
+      "60d_win_rate_pct": 40.8,
+      "90d_mean_excess_pct": -2.5,
+      "90d_win_rate_pct": 38.9,
+      "180d_mean_excess_pct": -3.11,
+      "180d_win_rate_pct": 40.0
+    },
+    "republican": {
+      "30d_mean_excess_pct": -0.44,
+      "30d_win_rate_pct": 44.3,
+      "60d_mean_excess_pct": -0.55,
+      "60d_win_rate_pct": 43.2,
+      "90d_mean_excess_pct": -0.95,
+      "90d_win_rate_pct": 40.4,
+      "180d_mean_excess_pct": 0.41,
+      "180d_win_rate_pct": 42.8
+    }
+  },
+  "by_trade_type": {
+    "buy": {
+      "30d": {
+        "n": 1764,
+        "mean_excess_pct": -0.41,
+        "win_rate_pct": 44.7,
+        "p_value": 0.06
+      },
+      "60d": {
+        "n": 1764,
+        "mean_excess_pct": -1.4,
+        "win_rate_pct": 41.4,
+        "p_value": 0.0
+      },
+      "90d": {
+        "n": 1764,
+        "mean_excess_pct": -1.52,
+        "win_rate_pct": 39.7,
+        "p_value": 0.0002
+      },
+      "180d": {
+        "n": 1764,
+        "mean_excess_pct": -2.28,
+        "win_rate_pct": 42.2,
+        "p_value": 0.0002
+      }
+    },
+    "sell": {
+      "30d": {
+        "n": 2189,
+        "mean_excess_pct": -1.01,
+        "win_rate_pct": 42.7,
+        "p_value": 0.0
+      },
+      "60d": {
+        "n": 2189,
+        "mean_excess_pct": -1.33,
+        "win_rate_pct": 42.3,
+        "p_value": 0.0
+      },
+      "90d": {
+        "n": 2189,
+        "mean_excess_pct": -2.05,
+        "win_rate_pct": 39.6,
+        "p_value": 0.0
+      },
+      "180d": {
+        "n": 2189,
+        "mean_excess_pct": -1.03,
+        "win_rate_pct": 40.6,
+        "p_value": 0.1398
+      }
+    }
+  },
+  "top_traders": [
+    {
+      "name": "Tim Moore",
+      "party": "republican",
+      "n_trades": 15,
+      "mean_30d_excess_pct": 9.27,
+      "win_rate_30d": 1.0
+    },
+    {
+      "name": "Tina Smith",
+      "party": "democrat",
+      "n_trades": 3,
+      "mean_30d_excess_pct": 7.09,
+      "win_rate_30d": 1.0
+    },
+    {
+      "name": "Laurel Lee",
+      "party": "republican",
+      "n_trades": 4,
+      "mean_30d_excess_pct": 5.9,
+      "win_rate_30d": 0.75
+    },
+    {
+      "name": "Virginia Foxx",
+      "party": "republican",
+      "n_trades": 12,
+      "mean_30d_excess_pct": 5.49,
+      "win_rate_30d": 0.5
+    },
+    {
+      "name": "Rick Allen",
+      "party": "republican",
+      "n_trades": 6,
+      "mean_30d_excess_pct": 5.31,
+      "win_rate_30d": 0.6667
+    },
+    {
+      "name": "Tommy Tuberville",
+      "party": "republican",
+      "n_trades": 26,
+      "mean_30d_excess_pct": 4.71,
+      "win_rate_30d": 0.5385
+    },
+    {
+      "name": "Sheldon Whitehouse",
+      "party": "democrat",
+      "n_trades": 21,
+      "mean_30d_excess_pct": 3.97,
+      "win_rate_30d": 0.619
+    },
+    {
+      "name": "Ashley Moody",
+      "party": "republican",
+      "n_trades": 10,
+      "mean_30d_excess_pct": 3.53,
+      "win_rate_30d": 0.5
+    },
+    {
+      "name": "John Boozman",
+      "party": "republican",
+      "n_trades": 52,
+      "mean_30d_excess_pct": 2.91,
+      "win_rate_30d": 0.6154
+    },
+    {
+      "name": "Mark Green",
+      "party": "republican",
+      "n_trades": 7,
+      "mean_30d_excess_pct": 2.87,
+      "win_rate_30d": 0.7143
+    }
+  ]
+}
